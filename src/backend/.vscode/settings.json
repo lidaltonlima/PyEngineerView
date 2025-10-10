@@ -1,0 +1,31 @@
+{
+	"cSpell.words": [
+		"arctan",
+		"collinearity",
+		"disp",
+		"Lidalton",
+		"lightgreen",
+		"linalg",
+		"matheus",
+		"ndarray",
+		"pinv",
+		"printoptions",
+		"pyengineer",
+		"pylint",
+		"pyright",
+		"pyvista",
+		"romero",
+		"Silvio"
+	],
+
+	// Ícones personalizados para as pastas com nome diferente
+	"material-icon-theme.folders.associations": {
+		"analysis": "core",
+		"objects": "delta",
+		"fetch": "download",
+    "engineering": "nuxt",
+    "reactions": "vercel",
+    "pyengineer": "nuxt",
+	},
+	"python-envs.pythonProjects": []
+}

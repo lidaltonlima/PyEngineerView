@@ -30,6 +30,7 @@ def somar(req: SomaRequest):
     return {"resultado": req.a + req.b}
 
 server: uvicorn.Server | None = None
+
 @app.post("/shutdown")
 def shutdown():
     """

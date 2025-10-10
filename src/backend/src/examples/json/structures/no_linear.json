@@ -1,0 +1,183 @@
+{
+	"materials": [
+		{
+			"name": "steel",
+			"properties": { "E": 2e11, "G": 7.692308e10, "nu": 0.3, "rho": 7850 }
+		}
+	],
+
+	"sections": [
+		{
+			"name": "w150x13",
+			"area": 1.63e-3,
+			"inertias": { "Ix": 1.39e-8, "Iy": 6.2e-6, "Iz": 8.28e-7 }
+		},
+		{
+			"name": "BR1",
+			"area": 5.067e-4,
+			"inertias": { "Ix": 4.0816e-8, "Iy": 2.0432e-8, "Iz": 2.0432e-8 }
+		}
+	],
+
+	"nodes": [
+		{ "name": "N1", "position": [0, 0, 0] },
+		{ "name": "N2", "position": [0, 0, 5] },
+		{ "name": "N3", "position": [5, 0, 5] },
+		{ "name": "N4", "position": [5, 0, 0] }
+	],
+
+	"bars": [
+		{
+			"name": "B1",
+			"start_node": "N1",
+			"end_node": "N2",
+			"section": "w150x13",
+			"material": "steel",
+			"rotation": 0,
+			"rotate_releases": true,
+			"releases": {
+				"Dxi": false,
+				"Dyi": false,
+				"Dzi": false,
+				"Rxi": false,
+				"Ryi": false,
+				"Rzi": false,
+				"Dxj": false,
+				"Dyj": false,
+				"Dzj": false,
+				"Rxj": false,
+				"Ryj": false,
+				"Rzj": false
+			}
+		},
+		{
+			"name": "B2",
+			"start_node": "N2",
+			"end_node": "N3",
+			"section": "w150x13",
+			"material": "steel",
+			"rotation": 0,
+			"rotate_releases": true,
+			"releases": {
+				"Dxi": false,
+				"Dyi": false,
+				"Dzi": false,
+				"Rxi": false,
+				"Ryi": false,
+				"Rzi": false,
+				"Dxj": false,
+				"Dyj": false,
+				"Dzj": false,
+				"Rxj": false,
+				"Ryj": false,
+				"Rzj": false
+			}
+		},
+		{
+			"name": "B3",
+			"start_node": "N3",
+			"end_node": "N4",
+			"section": "w150x13",
+			"material": "steel",
+			"rotation": 0,
+			"rotate_releases": true,
+			"releases": {
+				"Dxi": false,
+				"Dyi": false,
+				"Dzi": false,
+				"Rxi": false,
+				"Ryi": false,
+				"Rzi": false,
+				"Dxj": false,
+				"Dyj": false,
+				"Dzj": false,
+				"Rxj": false,
+				"Ryj": false,
+				"Rzj": false
+			}
+		},
+		{
+			"name": "B4",
+			"start_node": "N1",
+			"end_node": "N3",
+			"section": "BR1",
+			"material": "steel",
+			"rotation": 0,
+			"rotate_releases": true,
+			"releases": {
+				"Dxi": false,
+				"Dyi": false,
+				"Dzi": false,
+				"Rxi": false,
+				"Ryi": false,
+				"Rzi": false,
+				"Dxj": false,
+				"Dyj": false,
+				"Dzj": false,
+				"Rxj": false,
+				"Ryj": false,
+				"Rzj": false
+			}
+		},
+		{
+			"name": "B5",
+			"start_node": "N2",
+			"end_node": "N4",
+			"section": "BR1",
+			"material": "steel",
+			"rotation": 0,
+			"rotate_releases": true,
+			"releases": {
+				"Dxi": false,
+				"Dyi": false,
+				"Dzi": false,
+				"Rxi": false,
+				"Ryi": false,
+				"Rzi": false,
+				"Dxj": false,
+				"Dyj": false,
+				"Dzj": false,
+				"Rxj": false,
+				"Ryj": false,
+				"Rzj": false
+			}
+		}
+	],
+
+	"supports": [
+		{
+			"node": "N1",
+			"supports": { "Dx": true, "Dy": true, "Dz": true, "Rx": true, "Ry": true, "Rz": true }
+		},
+		{
+			"node": "N4",
+			"supports": { "Dx": true, "Dy": true, "Dz": true, "Rx": true, "Ry": true, "Rz": true }
+		}
+	],
+
+	"loads": [
+		{
+			"name": "L1",
+			"nodes_loads": [
+				{
+					"name": "F1",
+					"node": "N2",
+					"loads": { "Fx": 1e3, "Fy": 2e3, "Fz": 3e3, "Mx": 4e3, "My": 5e3, "Mz": 6e3 }
+				}
+			],
+			"bars_loads": {
+				"points": {
+					"bar": "B1",
+					"position": [0, 1, 0],
+					"system": "local",
+					"loads": { "Fx": 0, "Fy": 0, "Fz": 0, "Mx": 0, "My": 0, "Mz": 0 }
+				},
+				"distributed": {
+					"bar": "B2",
+					"system": "local",
+					"loads": { "Fx": 0, "Fy": 0, "Fz": 0, "Mx": 0, "My": 0, "Mz": 0 }
+				}
+			}
+		}
+	]
+}
