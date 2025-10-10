@@ -1,4 +1,5 @@
 """Main module."""
+import socket
 import sys
 from time import sleep
 import threading
@@ -46,7 +47,19 @@ def shutdown():
     threading.Thread(target=stop).start()
     return JSONResponse({"message": "Server is shutting down..."})
 
+# Utils functions
+def find_free_port() -> int:
+    """Gets a free port from the OS.
+
+    Returns:
+        int: The free port number.
+    """
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("", 0))
+        return s.getsockname()[1]
+
 if __name__ == "__main__":
-    config = uvicorn.Config(app=app, port=8000, log_level="info")
-    server = uvicorn.Server(config)
-    server.run()
+    port = find_free_port()
+    print(f"Using dynamic port: {port}", flush=True)
+    # Level of logs: critical, error, warning, info (default), debug, trace
+    uvicorn.run(app, host="127.0.0.1", port=port, log_level="info")

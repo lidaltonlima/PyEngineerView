@@ -1,31 +1,69 @@
 {
-	"cSpell.words": [
-		"arctan",
-		"collinearity",
-		"disp",
-		"Lidalton",
-		"lightgreen",
-		"linalg",
-		"matheus",
-		"ndarray",
-		"pinv",
-		"printoptions",
-		"pyengineer",
-		"pylint",
-		"pyright",
-		"pyvista",
-		"romero",
-		"Silvio"
-	],
-
-	// Ícones personalizados para as pastas com nome diferente
-	"material-icon-theme.folders.associations": {
-		"analysis": "core",
-		"objects": "delta",
-		"fetch": "download",
-    "engineering": "nuxt",
-    "reactions": "vercel",
-    "pyengineer": "nuxt",
-	},
-	"python-envs.pythonProjects": []
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+    // Ícones personalizados para as pastas com nome diferente
+  "material-icon-theme.folders.associations": {
+      "resizablecontainer": "container",
+      "navbar": "link",
+      "tabbar": "command",
+      "renderer": "interface",
+      "preload": "include",
+      "3d": "unity",
+      "accordion": "container",
+      "footer": "powershell",
+      "titlebar": "desktop",
+      "objects": "sandbox",
+      "scene_components": "components",
+      "scenes_2d": "ui",
+      "scenes_3d": "webpack",
+      "analysis": "core",
+      "results": "functions",
+      "aside": "template",
+      "workspace": "app",
+      "workspaces": "app",
+      "popupcontainer": "container",
+      "tabcontainer": "container",
+			"structural": "delta",
+			"loads": "download",
+			"fetch": "download",
+			"engineering": "nuxt",
+			"reactions": "vercel",
+			"pyengineer": "nuxt",
+  },
+  "cSpell.words": [
+    "arctan",
+    "collinearity",
+    "disp",
+    "drei",
+    "euler",
+    "Lidalton",
+    "lightgreen",
+    "linalg",
+    "matheus",
+    "ndarray",
+    "noconsole",
+    "onefile",
+    "pinv",
+    "printoptions",
+    "pyengineer",
+    "pyinstaller",
+    "pylint",
+    "pyright",
+    "pyvista",
+    "raycaster",
+    "romero",
+    "Silvio",
+    "taskkill",
+    "togglefullscreen",
+    "venv"
+  ],
+  "python-envs.defaultEnvManager": "ms-python.python:system",
+  "python-envs.pythonProjects": []
 }

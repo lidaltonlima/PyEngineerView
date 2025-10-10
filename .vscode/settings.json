@@ -31,7 +31,11 @@
       "popupcontainer": "container",
       "tabcontainer": "container",
 			"structural": "delta",
-			"loads": "download"
+			"loads": "download",
+			"fetch": "download",
+			"engineering": "nuxt",
+			"reactions": "vercel",
+			"pyengineer": "nuxt",
   },
   "cSpell.words": [
     "drei",
@@ -39,6 +43,24 @@
     "raycaster",
     "taskkill",
     "togglefullscreen",
-    "venv"
-  ]
+    "venv",
+		"arctan",
+		"collinearity",
+		"disp",
+		"Lidalton",
+		"lightgreen",
+		"linalg",
+		"matheus",
+		"ndarray",
+		"pinv",
+		"printoptions",
+		"pyengineer",
+		"pylint",
+		"pyright",
+		"pyvista",
+		"romero",
+		"Silvio"
+  ],
+  "python-envs.defaultEnvManager": "ms-python.python:system",
+  "python-envs.pythonProjects": []
 }

@@ -18,14 +18,24 @@ export const App = (): React.JSX.Element => {
 
 	const [viewSupports] = view.supports
 
-	///////////////////////////////////
+	///////////////////////////////////////////////////////////////
+	const [baseURL, setBaseURL] = useState<string>('')
+
+	useEffect(() => {
+		window.electron.ipcRenderer.send('finish-load')
+		window.electron.ipcRenderer.on('backend-port', (_, appURL) => {
+			setBaseURL(appURL)
+		})
+	}, [])
+
 	const [a, setA] = useState('')
 	const [b, setB] = useState('')
 	const [resultado, setResultado] = useState<number | null>(null)
 
 	const somar = async (): Promise<void> => {
+		console.log(baseURL)
 		try {
-			const response = await fetch('http://localhost:8000/somar', {
+			const response = await fetch(`${baseURL}/somar`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

@@ -8,6 +8,9 @@ import { loadData } from './storage'
 import { ChildProcessWithoutNullStreams, exec, spawn } from 'child_process'
 import path from 'path'
 
+// Variables
+let baseURL = ''
+
 function createWindow(): void {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
@@ -47,10 +50,15 @@ function createWindow(): void {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-	// Functions executed on app ready /////////////////////////////////////////////////////////////////////////////////
-	startPythonBackend()
+app.whenReady().then(async () => {
 	// IPC //////////////////////////////////////////////////////////////////////////////////////////
+	// Send port number to renderer process *********************************************************
+	const port = await startPythonBackend()
+	baseURL = `http://127.0.0.1:${port}`
+	ipcMain.on('finish-load', (event) => {
+		event.sender.send('backend-port', baseURL)
+	})
+
 	// Read data files *******************************************************************
 	ipcMain.handle('get-data', (_event, filePath) => loadData(filePath))
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,29 +104,36 @@ app.on('window-all-closed', () => {
 // code. You can also put them in separate files and require them here.
 // Functions //////////////////////////////////////////////////////////////////////////////////////
 let pyProc: ChildProcessWithoutNullStreams | null = null
-function startPythonBackend(): void {
-	const isDev = !app.isPackaged // Verify if we are in development or production
+async function startPythonBackend(): Promise<number> {
+	return new Promise((resolve) => {
+		const isDev = !app.isPackaged // Verify if we are in development or production
 
-	// Path to the Python executable or script
-	if (isDev) {
-		const vEnvPython = path.join(__dirname, '../../src/backend/.venv/Scripts/python.exe')
-		const backendPath = path.join(__dirname, '../../src/backend/main.py')
-		pyProc = spawn(vEnvPython, [backendPath])
-	} else {
-		const backendPath = path.join(process.resourcesPath, 'backend', 'main.exe')
-		pyProc = spawn(backendPath)
-	}
+		// Path to the Python executable or script
+		if (isDev) {
+			const vEnvPython = path.join(__dirname, '../../src/backend/.venv/Scripts/python.exe')
+			const backendPath = path.join(__dirname, '../../src/backend/main.py')
+			pyProc = spawn(vEnvPython, [backendPath])
+		} else {
+			const backendPath = path.join(process.resourcesPath, 'backend', 'engineer.exe')
+			pyProc = spawn(backendPath)
+		}
 
-	pyProc.stdout.on('data', (data) => {
-		console.log(`Python: ${data}`)
-	})
+		pyProc.stdout.on('data', (data) => {
+			console.log(`Python: ${data}`)
+			const line = data.toString()
+			const match = line.match(/Using dynamic port:\s*(\d+)/)
+			if (match) {
+				resolve(parseInt(match[1], 10))
+			}
+		})
 
-	pyProc.stderr.on('data', (data) => {
-		console.error(`Python error: ${data}`)
-	})
+		pyProc.stderr.on('data', (data) => {
+			console.error(`Python error: ${data}`)
+		})
 
-	pyProc.on('close', (code) => {
-		console.log(`Python process exited with code ${code}`)
+		pyProc.on('close', (code) => {
+			console.log(`Python process exited with code ${code}`)
+		})
 	})
 }
 
@@ -128,7 +143,7 @@ async function killPythonProcess(): Promise<void> {
 	// Attempt to gracefully shut down the FastAPI server
 	console.log('Shutting down Python backend...')
 	try {
-		await fetch('http://localhost:8000/shutdown', { method: 'POST' })
+		await fetch(`${baseURL}/shutdown`, { method: 'POST' })
 	} catch (err) {
 		console.warn('shutdown error:', err)
 	}
