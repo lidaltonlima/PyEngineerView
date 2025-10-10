@@ -18,6 +18,33 @@ export const App = (): React.JSX.Element => {
 
 	const [viewSupports] = view.supports
 
+	///////////////////////////////////
+	const [a, setA] = useState('')
+	const [b, setB] = useState('')
+	const [resultado, setResultado] = useState<number | null>(null)
+
+	const somar = async (): Promise<void> => {
+		try {
+			const response = await fetch('http://localhost:8000/somar', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ a, b })
+			})
+
+			if (!response.ok) {
+				throw new Error('Error in network response')
+			}
+
+			const data = await response.json()
+			setResultado(data.resultado)
+		} catch (error) {
+			console.error('Error connecting to backend:', error)
+		}
+	}
+	///////////////////////////////////
+
 	useEffect(() => {
 		const disposeOpenFile = window.electron.ipcRenderer.on(
 			'open-file',
@@ -73,6 +100,27 @@ export const App = (): React.JSX.Element => {
 					<Accordion title='Results' className='accordion'>
 						<Results />
 					</Accordion>
+					<div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
+						<h1>Soma com FastAPI</h1>
+						<input
+							style={{ color: 'black' }}
+							type='number'
+							value={a}
+							onChange={(e) => setA(e.target.value)}
+							placeholder='Número A'
+						/>
+						<input
+							style={{ color: 'black' }}
+							type='number'
+							value={b}
+							onChange={(e) => setB(e.target.value)}
+							placeholder='Número B'
+						/>
+						<button style={{ color: 'black' }} onClick={somar}>
+							Somar
+						</button>
+						{resultado !== null && <p>Resultado: {resultado}</p>}
+					</div>
 				</ResizableContainer>
 			</main>
 			<footer>{footerText}</footer>

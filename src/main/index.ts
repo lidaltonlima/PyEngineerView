@@ -5,6 +5,9 @@ import icon from '../../resources/icon.png?asset'
 import { menuBarTemplate } from './menuBar'
 import { loadData } from './storage'
 
+import { ChildProcessWithoutNullStreams, exec, spawn } from 'child_process'
+import path from 'path'
+
 function createWindow(): void {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
@@ -45,6 +48,13 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+	// Functions executed on app ready /////////////////////////////////////////////////////////////////////////////////
+	startPythonBackend()
+	// IPC //////////////////////////////////////////////////////////////////////////////////////////
+	// Read data files *******************************************************************
+	ipcMain.handle('get-data', (_event, filePath) => loadData(filePath))
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// Set app user model id for windows
 	electronApp.setAppUserModelId('com.electron')
 
@@ -54,12 +64,6 @@ app.whenReady().then(() => {
 	app.on('browser-window-created', (_, window) => {
 		optimizer.watchWindowShortcuts(window)
 	})
-
-	// IPC //////////////////////////////////////////////////////////////////////////////////////////
-	// Read data files *******************************************************************
-	ipcMain.handle('get-data', (_event, filePath) => loadData(filePath))
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	createWindow()
 
@@ -77,10 +81,79 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-	if (process.platform !== 'darwin') {
-		app.quit()
-	}
+	// Functions executed on app quit ///////////////////////////////////////////////////////////////
+	killPythonProcess()
+
+	setTimeout(() => {
+		// Quit app
+		if (process.platform !== 'darwin') {
+			app.quit()
+		}
+	}, 3000) // Delay to ensure Python process is killed before quitting the app
 })
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+// Functions //////////////////////////////////////////////////////////////////////////////////////
+let pyProc: ChildProcessWithoutNullStreams | null = null
+function startPythonBackend(): void {
+	const isDev = !app.isPackaged // Verify if we are in development or production
+
+	// Path to the Python executable or script
+	if (isDev) {
+		const vEnvPython = path.join(__dirname, '../../src/backend/.venv/Scripts/python.exe')
+		const backendPath = path.join(__dirname, '../../src/backend/main.py')
+		pyProc = spawn(vEnvPython, [backendPath])
+	} else {
+		const backendPath = path.join(process.resourcesPath, 'backend', 'main.exe')
+		pyProc = spawn(backendPath)
+	}
+
+	pyProc.stdout.on('data', (data) => {
+		console.log(`Python: ${data}`)
+	})
+
+	pyProc.stderr.on('data', (data) => {
+		console.error(`Python error: ${data}`)
+	})
+
+	pyProc.on('close', (code) => {
+		console.log(`Python process exited with code ${code}`)
+	})
+}
+
+async function killPythonProcess(): Promise<void> {
+	if (!pyProc) return
+
+	// Attempt to gracefully shut down the FastAPI server
+	console.log('Shutting down Python backend...')
+	try {
+		await fetch('http://localhost:8000/shutdown', { method: 'POST' })
+	} catch (err) {
+		console.warn('shutdown error:', err)
+	}
+
+	// Force kill all subprocesses if still running
+	// Wait for 2 seconds before force killing
+	await new Promise((resolve) => setTimeout(resolve, 1500))
+	try {
+		if (process.platform === 'win32') {
+			const pid = pyProc.pid
+			console.log(`Closing backend (PID: ${pid})...`)
+			exec(`taskkill /pid ${pid} /T /F`, (err) => {
+				if (err) console.warn('Failed to kill process:', err)
+				else console.log('Backend closed successfully (Windows)')
+			})
+		} else {
+			// For Linux/macOS
+			try {
+				pyProc.kill('SIGTERM')
+				console.log('Backend closed successfully (Unix)')
+			} catch (err) {
+				console.warn('Failed to kill process:', err)
+			}
+		}
+	} catch (err) {
+		console.error('Error closing backend:', err)
+	}
+}

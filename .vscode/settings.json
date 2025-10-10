@@ -37,6 +37,8 @@
     "drei",
     "euler",
     "raycaster",
-    "togglefullscreen"
+    "taskkill",
+    "togglefullscreen",
+    "venv"
   ]
 }
