@@ -1,0 +1,81 @@
+import { useEffect, useState } from 'react'
+import { Default3dScene } from './components/3d'
+import { Bar, Node, Support } from './components/3d/objects/structural/elements'
+import { ClickVoid } from './components/3d/utils'
+import { ResizableContainer } from './containers'
+import { Accordion } from './containers/Accordion'
+import { Results, ViewEntities } from './contents'
+import { useSceneContext } from './contexts/Scene'
+import { useStructureContext } from './contexts/Structure'
+import { IStructureData } from './types/Structure'
+
+export const App = (): React.JSX.Element => {
+	const { structure } = useStructureContext()
+	const { view } = useSceneContext()
+
+	const [structureData, setStructureData] = useState<IStructureData | null>()
+	const [footerText, setFooterText] = useState('Open a structure')
+
+	const [viewSupports] = view.supports
+
+	useEffect(() => {
+		const disposeOpenFile = window.electron.ipcRenderer.on(
+			'open-file',
+			(_event, data: IStructureData) => {
+				setStructureData(data)
+				structure.nodes = data.nodes
+				structure.bars = data.bars
+				structure.supports = data.supports
+				structure.loads = data.loads
+				structure.materials = data.materials
+				structure.sections = data.sections
+				structure.results = data.results
+
+				// Set footer text
+				if (data.results) setFooterText('Click in a object for view results.')
+				else setFooterText('No results available. Open a calculation structure.')
+			}
+		)
+
+		return () => {
+			disposeOpenFile()
+		}
+	}, [structure])
+
+	return (
+		<>
+			<main>
+				<div className='canvas-container'>
+					<div className='canvas-content'>
+						<Default3dScene>
+							{structureData?.bars.map((bar) => <Bar key={bar.name} bar={bar} />)}
+							{structureData?.nodes.map((node) => <Node key={node.name} node={node} label />)}
+							{viewSupports &&
+								structureData?.supports.map((support) => (
+									<Support key={support.node} support={support} structure={structureData} />
+								))}
+							<axesHelper />
+							<ClickVoid />
+						</Default3dScene>
+					</div>
+				</div>
+				<ResizableContainer
+					className='aside'
+					initialWidth={250}
+					minWidth={250}
+					maxWidth={500}
+					resizeLeft
+					fullHeight
+				>
+					<Accordion title='View' className='accordion'>
+						<ViewEntities />
+					</Accordion>
+					<Accordion title='Results' className='accordion'>
+						<Results />
+					</Accordion>
+				</ResizableContainer>
+			</main>
+			<footer>{footerText}</footer>
+		</>
+	)
+}

@@ -1,0 +1,45 @@
+.main {
+  border-radius: 4px;
+}
+
+.header {
+  width: 100%;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 2px;
+
+  span {
+    flex: 1;
+    text-align: left;
+  }
+}
+
+.body {
+  overflow: hidden;
+  transition: max-height 0s ease-in-out;
+
+  .inner {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+.icon {
+  transition: transform 0s ease-in-out;
+}
+
+.rotateDown {
+  transform: rotate(0deg);
+}
+
+.rotateRight {
+  transform: rotate(-90deg);
+}
+

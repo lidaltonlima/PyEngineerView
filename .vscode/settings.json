@@ -1,0 +1,42 @@
+{
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+    // Ícones personalizados para as pastas com nome diferente
+  "material-icon-theme.folders.associations": {
+      "resizablecontainer": "container",
+      "navbar": "link",
+      "tabbar": "command",
+      "renderer": "interface",
+      "preload": "include",
+      "3d": "unity",
+      "accordion": "container",
+      "footer": "powershell",
+      "titlebar": "desktop",
+      "objects": "sandbox",
+      "scene_components": "components",
+      "scenes_2d": "ui",
+      "scenes_3d": "webpack",
+      "analysis": "core",
+      "results": "functions",
+      "aside": "template",
+      "workspace": "app",
+      "workspaces": "app",
+      "popupcontainer": "container",
+      "tabcontainer": "container",
+			"structural": "delta",
+			"loads": "download"
+  },
+  "cSpell.words": [
+    "drei",
+    "euler",
+    "raycaster",
+    "togglefullscreen"
+  ]
+}
