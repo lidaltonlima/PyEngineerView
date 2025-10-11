@@ -50,7 +50,7 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 							]
 						})
 						.then((result) => {
-							loadJsonData(result.filePaths[0])
+							loadJsonData(result)
 						})
 						.catch((error) => {
 							console.log(error)
