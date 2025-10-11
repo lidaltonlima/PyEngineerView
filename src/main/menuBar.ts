@@ -62,6 +62,19 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 		]
 	},
 	{
+		label: 'Calculate',
+		submenu: [
+			{
+				label: 'Calculate Structure',
+				accelerator: 'F5',
+				click: () => {
+					const focusedWin = BrowserWindow.getFocusedWindow()
+					focusedWin?.webContents.send('calculate-structure')
+				}
+			}
+		]
+	},
+	{
 		label: 'View',
 		submenu: [
 			{ label: 'Zoom In', accelerator: 'Ctrl+numAdd', role: 'zoomIn' },

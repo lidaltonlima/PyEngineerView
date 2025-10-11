@@ -1,6 +1,7 @@
 """Main module."""
 import sys
 import pathlib
+from typing import Any
 from time import sleep
 
 import socket
@@ -27,6 +28,7 @@ app.add_middleware(
 )
 
 # Functions ///////////////////////////////////////////////////////////////////////////////////////
+# Open Excel route ********************************************************************************
 class IOpenExcel(BaseModel):
     """Interface"""
     path: str
@@ -42,7 +44,17 @@ def open_excel(req: IOpenExcel):
         print(f"Error: {e}", flush=True)
         return JSONResponse(status_code=500, content={"message": str(e)})
 
-# Shutdown route
+# Calculate structure route ***********************************************************************
+class ICalculateStructure(BaseModel):
+    """Interface"""
+    data: dict[str, Any]
+
+@app.post('/calculate-structure')
+def calculate_structure():
+    """Calculate structure from data."""
+    print('Calculating structure...')
+
+# Shutdown route **********************************************************************************
 server: uvicorn.Server | None = None
 @app.post("/shutdown")
 def shutdown():

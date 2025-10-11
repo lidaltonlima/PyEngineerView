@@ -27,6 +27,7 @@ export const App = (): React.JSX.Element => {
 		})
 	}, [])
 
+	// IPC listeners //////////////////////////////////////////////////////////////////////////////
 	useEffect(() => {
 		const openExcel = async (path: string): Promise<void> => {
 			try {
@@ -43,20 +44,17 @@ export const App = (): React.JSX.Element => {
 				}
 
 				// Update structure data
-				if (response.status === 200) {
-					const data = await response.json()
-					setStructureData(data)
-					structure.nodes = data.nodes
-					structure.bars = data.bars
-					structure.supports = data.supports
-					structure.loads = data.loads
-					structure.materials = data.materials
-					structure.sections = data.sections
-					structure.results = data.results
-				} else {
-					window.alert('Error opening Excel file')
-				}
+				const data = await response.json()
+				setStructureData(data)
+				structure.nodes = data.nodes
+				structure.bars = data.bars
+				structure.supports = data.supports
+				structure.loads = data.loads
+				structure.materials = data.materials
+				structure.sections = data.sections
+				structure.results = data.results
 			} catch (error) {
+				window.alert('Error opening Excel file. Check if it was using the template')
 				console.error('Error connecting to backend:', error)
 			}
 		}
@@ -89,9 +87,32 @@ export const App = (): React.JSX.Element => {
 			)
 		})
 
+		const disposeCalculateStructure = window.electron.ipcRenderer.on(
+			'calculate-structure',
+			async () => {
+				console.log('Calculating structure...')
+				try {
+					const response = await fetch(`${baseURL}/calculate-structure`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						}
+						// body: JSON.stringify({ path })
+					})
+
+					if (!response.ok) {
+						throw new Error('Error in network response')
+					}
+				} catch (error) {
+					console.error('Error connecting to backend:', error)
+				}
+			}
+		)
+
 		return () => {
 			disposeOpenJsonFile()
 			disposeExcelFile()
+			disposeCalculateStructure()
 		}
 	}, [structure, baseURL])
 
