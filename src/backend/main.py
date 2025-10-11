@@ -1,5 +1,4 @@
 """Main module."""
-import json
 import sys
 import pathlib
 from time import sleep
@@ -12,7 +11,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from pyengineer.tools import calculate_excel, create_calculated_structure
+from pyengineer.tools import calculate_excel, create_json_input
 
 CURRENT_DIR = pathlib.Path(__file__).parent.resolve()
 
@@ -28,27 +27,17 @@ app.add_middleware(
 )
 
 # Functions ///////////////////////////////////////////////////////////////////////////////////////
+class IOpenExcel(BaseModel):
+    """Interface"""
+    path: str
+
 @app.post('/open_excel')
-def open_excel():
+def open_excel(req: IOpenExcel):
     """Get structure from Excel file."""
     try:
-        # Calculate structure from json file
-        relative_path = pathlib.Path('src/examples/excel', 'matheus_romero_02.xlsx')
-        path_open = CURRENT_DIR / relative_path
-        print(f"Opening Excel file at: {path_open}")
-        analysis = calculate_excel(path_open, 'L1')
-
-        # Create json file from calculated structure
-        temp_path = './pyengineer/temp/structure_calculated.json'
-        path_create = CURRENT_DIR / temp_path
-        create_calculated_structure(path_create, analysis)
-
-        with open(path_create, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-            return data
-
-        # return {'status': 'success', 'message': 'File processed successfully.'}
-
+        analysis = calculate_excel(req.path, 'L1', False)
+        data = create_json_input(analysis, False)
+        return data
     except Exception as e: # pylint: disable=W0703
         return {'status': 'error', 'message': str(e)}
 

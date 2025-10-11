@@ -1,13 +1,35 @@
 import { dialog, MenuItem, MenuItemConstructorOptions } from 'electron'
-import { loadData } from './storage'
+import { loadJsonData, loadExcelData } from './storage'
 
 export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 	{
 		label: 'File',
 		submenu: [
 			{
-				label: 'Open file',
+				label: 'Open Excel',
 				accelerator: 'Ctrl+O',
+				click: () => {
+					dialog
+						.showOpenDialog({
+							properties: ['openFile'],
+							filters: [
+								{
+									name: 'Excel Files',
+									extensions: ['xlsx']
+								}
+							]
+						})
+						.then((result) => {
+							loadExcelData(result.filePaths[0])
+						})
+						.catch((error) => {
+							console.log(error)
+						})
+				}
+			},
+			{
+				label: 'Open Json',
+				accelerator: 'Ctrl+J',
 				click: () => {
 					dialog
 						.showOpenDialog({
@@ -20,15 +42,14 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 							]
 						})
 						.then((result) => {
-							// const focusedWin = BrowserWindow.getFocusedWindow()
-							// focusedWin?.webContents.send('open-file', result)
-							loadData(result.filePaths[0])
+							loadJsonData(result.filePaths[0])
 						})
 						.catch((error) => {
 							console.log(error)
 						})
 				}
 			},
+			{ type: 'separator' },
 			{ label: 'Exit', accelerator: 'Alt+F4', role: 'quit' }
 		]
 	},

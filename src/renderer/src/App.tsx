@@ -18,9 +18,8 @@ export const App = (): React.JSX.Element => {
 
 	const [viewSupports] = view.supports
 
-	///////////////////////////////////////////////////////////////
+	// Get backend URL //////////////////////////////////////////////////////////////////////////////
 	const [baseURL, setBaseURL] = useState<string>('')
-
 	useEffect(() => {
 		window.electron.ipcRenderer.send('finish-load')
 		window.electron.ipcRenderer.on('backend-port', (_, appURL) => {
@@ -28,56 +27,40 @@ export const App = (): React.JSX.Element => {
 		})
 	}, [])
 
-	const [a, setA] = useState('')
-	const [b, setB] = useState('')
-	const [resultado, setResultado] = useState<number | null>(null)
-
-	const somar = async (): Promise<void> => {
-		try {
-			const response = await fetch(`${baseURL}/somar`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ a, b })
-			})
-
-			if (!response.ok) {
-				throw new Error('Error in network response')
-			}
-
-			const data = await response.json()
-			setResultado(data.resultado)
-		} catch (error) {
-			console.error('Error connecting to backend:', error)
-		}
-	}
-
-	const openExcel = async (): Promise<void> => {
-		try {
-			const response = await fetch(`${baseURL}/open_excel`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
-
-			if (!response.ok) {
-				throw new Error('Error in network response')
-			}
-
-			const data = await response.json()
-			console.log(data)
-		} catch (error) {
-			console.error('Error connecting to backend:', error)
-		}
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-
 	useEffect(() => {
-		const disposeOpenFile = window.electron.ipcRenderer.on(
-			'open-file',
+		const openExcel = async (path: string): Promise<void> => {
+			try {
+				const response = await fetch(`${baseURL}/open_excel`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ path })
+				})
+
+				if (!response.ok) {
+					throw new Error('Error in network response')
+				}
+
+				// Update structure data
+				const data = await response.json()
+				setStructureData(data)
+				structure.nodes = data.nodes
+				structure.bars = data.bars
+				structure.supports = data.supports
+				structure.loads = data.loads
+				structure.materials = data.materials
+				structure.sections = data.sections
+				structure.results = data.results
+			} catch (error) {
+				console.error('Error connecting to backend:', error)
+			}
+		}
+
+		const disposeOpenJsonFile = window.electron.ipcRenderer.on(
+			'open-json-file',
 			(_event, data: IStructureData) => {
+				// Update structure data
 				setStructureData(data)
 				structure.nodes = data.nodes
 				structure.bars = data.bars
@@ -93,10 +76,22 @@ export const App = (): React.JSX.Element => {
 			}
 		)
 
+		const disposeExcelFile = window.electron.ipcRenderer.on(
+			'open-excel-file',
+			(_event, filePath) => {
+				openExcel(filePath)
+				// Set footer text
+				setFooterText(
+					'No results available. Calculate this structure or open a calculation structure.'
+				)
+			}
+		)
+
 		return () => {
-			disposeOpenFile()
+			disposeOpenJsonFile()
+			disposeExcelFile()
 		}
-	}, [structure])
+	}, [structure, baseURL])
 
 	return (
 		<>
@@ -129,30 +124,6 @@ export const App = (): React.JSX.Element => {
 					<Accordion title='Results' className='accordion'>
 						<Results />
 					</Accordion>
-					<div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
-						<h1>Soma com FastAPI</h1>
-						<input
-							style={{ color: 'black' }}
-							type='number'
-							value={a}
-							onChange={(e) => setA(e.target.value)}
-							placeholder='Número A'
-						/>
-						<input
-							style={{ color: 'black' }}
-							type='number'
-							value={b}
-							onChange={(e) => setB(e.target.value)}
-							placeholder='Número B'
-						/>
-						<button style={{ color: 'black' }} onClick={somar}>
-							Somar
-						</button>
-						{resultado !== null && <p>Resultado: {resultado}</p>}
-						<button style={{ color: 'black' }} onClick={openExcel}>
-							Get Excel
-						</button>
-					</div>
 				</ResizableContainer>
 			</main>
 			<footer>{footerText}</footer>

@@ -14,7 +14,7 @@ def get_structure_from_excel(path: str) -> dict[str, Any]:
         analysis (Linear): The linear analysis object containing results.
     """
     # Calculate structure from json file
-    analysis = calculate_excel(path, 'L1')
+    analysis = calculate_excel(path, 'L1', False)
 
     # Create json file from calculated structure
     temp_path = './pyengineer/temp/structure_calculated.json'

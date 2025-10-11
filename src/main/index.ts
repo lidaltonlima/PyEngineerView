@@ -3,7 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { menuBarTemplate } from './menuBar'
-import { loadData } from './storage'
+import { loadJsonData } from './storage'
 
 import { ChildProcessWithoutNullStreams, exec, spawn } from 'child_process'
 import path from 'path'
@@ -60,7 +60,7 @@ app.whenReady().then(async () => {
 	})
 
 	// Read data files *******************************************************************
-	ipcMain.handle('get-data', (_event, filePath) => loadData(filePath))
+	ipcMain.handle('get-data', (_event, filePath) => loadJsonData(filePath))
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Set app user model id for windows

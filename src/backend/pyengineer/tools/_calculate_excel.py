@@ -10,7 +10,7 @@ from pyengineer.analysis import Linear
 
 warnings.filterwarnings("ignore", category=UserWarning, module='openpyxl')
 
-def calculate_excel(path: str | Path, load_name: str) -> Linear:
+def calculate_excel(path: str | Path, load_name: str, calculate: bool = False) -> Linear:
     """Calculate structure from excel file."""
     # Load data from excel file ///////////////////////////////////////////////////////////////////
     # Materials ***********************************************************************************
@@ -118,4 +118,5 @@ def calculate_excel(path: str | Path, load_name: str) -> Linear:
     return Linear(nodes=list(nodes.values()),
                   bars=list(bars.values()),
                   supports=supports,
-                  loads=[loads])
+                  loads=[loads],
+                  calculate=calculate)

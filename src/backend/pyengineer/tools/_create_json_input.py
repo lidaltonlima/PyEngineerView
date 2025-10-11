@@ -1,5 +1,6 @@
 """Create JSON results file for calculated structure"""
 import json
+from typing import Any
 
 from pyengineer.objects._load import INodalLoadData
 from pyengineer.objects._support import ISupportSupports
@@ -8,14 +9,16 @@ from ..analysis._linear import Linear
 from ..objects import Material, Section
 
 
-def create_json_input(path: str, analysis: Linear) -> None:
+def create_json_input(analysis: Linear,
+                      create_file: bool = True,
+                      path: str = './json_input.json') -> dict[str, Any]:
     """Create a JSON results file for the linear analysis.
 
     Args:
         path (str): The path to the JSON file to create.
         analysis (Linear): The linear analysis object containing results.
     """
-    structure = {}
+    structure: dict[str, Any] = {}
 
     # Materials and Sections //////////////////////////////////////////////////////////////////////
     # Get materials and sections from bars
@@ -161,5 +164,8 @@ def create_json_input(path: str, analysis: Linear) -> None:
     structure['loads'] = loads_dict
 
     # Write results to JSON file //////////////////////////////////////////////////////////////////
-    with open(path, 'w', encoding='utf-8') as file:
-        json.dump(structure, file, indent=2)
+    if create_file:
+        with open(path, 'w', encoding='utf-8') as file:
+            json.dump(structure, file, indent=2)
+
+    return structure
