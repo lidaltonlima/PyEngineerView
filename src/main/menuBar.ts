@@ -1,5 +1,10 @@
-import { dialog, MenuItem, MenuItemConstructorOptions } from 'electron'
+import { dialog, MenuItem, MenuItemConstructorOptions, BrowserWindow } from 'electron'
 import { loadJsonData, loadExcelData } from './storage'
+
+const getMainWindow = (): BrowserWindow => {
+	// Uma maneira comum de obter a janela que criou o menu:
+	return BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0]
+}
 
 export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 	{
@@ -9,8 +14,10 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 				label: 'Open Excel',
 				accelerator: 'Ctrl+O',
 				click: () => {
+					const mainWindow = getMainWindow()
+
 					dialog
-						.showOpenDialog({
+						.showOpenDialog(mainWindow, {
 							properties: ['openFile'],
 							filters: [
 								{
@@ -20,7 +27,7 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 							]
 						})
 						.then((result) => {
-							loadExcelData(result.filePaths[0])
+							loadExcelData(result)
 						})
 						.catch((error) => {
 							console.log(error)
@@ -31,8 +38,9 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 				label: 'Open Json',
 				accelerator: 'Ctrl+J',
 				click: () => {
+					const mainWindow = getMainWindow()
 					dialog
-						.showOpenDialog({
+						.showOpenDialog(mainWindow, {
 							properties: ['openFile'],
 							filters: [
 								{

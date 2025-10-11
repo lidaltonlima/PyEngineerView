@@ -43,15 +43,19 @@ export const App = (): React.JSX.Element => {
 				}
 
 				// Update structure data
-				const data = await response.json()
-				setStructureData(data)
-				structure.nodes = data.nodes
-				structure.bars = data.bars
-				structure.supports = data.supports
-				structure.loads = data.loads
-				structure.materials = data.materials
-				structure.sections = data.sections
-				structure.results = data.results
+				if (response.status === 200) {
+					const data = await response.json()
+					setStructureData(data)
+					structure.nodes = data.nodes
+					structure.bars = data.bars
+					structure.supports = data.supports
+					structure.loads = data.loads
+					structure.materials = data.materials
+					structure.sections = data.sections
+					structure.results = data.results
+				} else {
+					window.alert('Error opening Excel file')
+				}
 			} catch (error) {
 				console.error('Error connecting to backend:', error)
 			}
@@ -76,16 +80,14 @@ export const App = (): React.JSX.Element => {
 			}
 		)
 
-		const disposeExcelFile = window.electron.ipcRenderer.on(
-			'open-excel-file',
-			(_event, filePath) => {
-				openExcel(filePath)
-				// Set footer text
-				setFooterText(
-					'No results available. Calculate this structure or open a calculation structure.'
-				)
-			}
-		)
+		const disposeExcelFile = window.electron.ipcRenderer.on('open-excel-file', (_event, result) => {
+			if (result.canceled) return
+			openExcel(result.filePaths[0])
+			// Set footer text
+			setFooterText(
+				'No results available. Calculate this structure or open a calculation structure.'
+			)
+		})
 
 		return () => {
 			disposeOpenJsonFile()

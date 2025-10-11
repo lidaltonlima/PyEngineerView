@@ -37,19 +37,10 @@ def open_excel(req: IOpenExcel):
     try:
         analysis = calculate_excel(req.path, 'L1', False)
         data = create_json_input(analysis, False)
-        return data
+        return JSONResponse(status_code=200, content=data)
     except Exception as e: # pylint: disable=W0703
-        return {'status': 'error', 'message': str(e)}
-
-class SomaRequest(BaseModel):
-    """Interface"""
-    a: float
-    b: float
-
-@app.post("/somar")
-def somar(req: SomaRequest):
-    """Test function to sum two numbers."""
-    return {"resultado": req.a + req.b}
+        print(f"Error: {e}", flush=True)
+        return JSONResponse(status_code=500, content={"message": str(e)})
 
 # Shutdown route
 server: uvicorn.Server | None = None
@@ -83,4 +74,6 @@ if __name__ == "__main__":
     port = find_free_port()
     print(f"Using dynamic port: {port}", flush=True)
     # Level of logs: critical, error, warning, info (default), debug, trace
-    uvicorn.run(app, host="127.0.0.1", port=port, log_level="info")
+    config = uvicorn.Config(app, host="127.0.0.1", port=port, log_level="info")
+    server = uvicorn.Server(config)
+    server.run()

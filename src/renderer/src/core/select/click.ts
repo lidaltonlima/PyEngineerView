@@ -14,7 +14,9 @@ export const click = (
 
 	event.stopPropagation()
 	if (!structureData.results) {
-		window.alert('No results available. Please open a calculated structure.')
+		window.alert(
+			'No results available. Please  calculate this structure or open a calculation structure.'
+		)
 		return
 	}
 }
