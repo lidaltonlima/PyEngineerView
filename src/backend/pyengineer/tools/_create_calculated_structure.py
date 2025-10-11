@@ -2,6 +2,7 @@
 Contains the create_json_calculated_structure function.
 This function is responsible for creating a JSON file that represents the calculated structure.
 """
+from pathlib import Path
 import json
 
 from pyengineer.objects._load import INodalLoadData
@@ -10,7 +11,7 @@ from pyengineer.objects._support import ISupportSupports
 from ..analysis._linear import Linear
 from ..objects import Material, Section
 
-def create_calculated_structure(path: str, analysis: Linear) -> None:
+def create_calculated_structure(path: str | Path, analysis: Linear) -> None:
     """Create a JSON file representing the calculated structure.
 
     Args:

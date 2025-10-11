@@ -33,7 +33,6 @@ export const App = (): React.JSX.Element => {
 	const [resultado, setResultado] = useState<number | null>(null)
 
 	const somar = async (): Promise<void> => {
-		console.log(baseURL)
 		try {
 			const response = await fetch(`${baseURL}/somar`, {
 				method: 'POST',
@@ -53,7 +52,27 @@ export const App = (): React.JSX.Element => {
 			console.error('Error connecting to backend:', error)
 		}
 	}
-	///////////////////////////////////
+
+	const openExcel = async (): Promise<void> => {
+		try {
+			const response = await fetch(`${baseURL}/open_excel`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+
+			if (!response.ok) {
+				throw new Error('Error in network response')
+			}
+
+			const data = await response.json()
+			console.log(data)
+		} catch (error) {
+			console.error('Error connecting to backend:', error)
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	useEffect(() => {
 		const disposeOpenFile = window.electron.ipcRenderer.on(
@@ -130,6 +149,9 @@ export const App = (): React.JSX.Element => {
 							Somar
 						</button>
 						{resultado !== null && <p>Resultado: {resultado}</p>}
+						<button style={{ color: 'black' }} onClick={openExcel}>
+							Get Excel
+						</button>
 					</div>
 				</ResizableContainer>
 			</main>

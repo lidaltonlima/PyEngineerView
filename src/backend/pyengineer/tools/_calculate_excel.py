@@ -1,6 +1,7 @@
 """Calculate structure from excel file."""
-
 import warnings
+
+from pathlib import Path
 
 from pandas import read_excel # type: ignore
 
@@ -9,7 +10,7 @@ from pyengineer.analysis import Linear
 
 warnings.filterwarnings("ignore", category=UserWarning, module='openpyxl')
 
-def calculate_excel(path: str, load_name: str) -> Linear:
+def calculate_excel(path: str | Path, load_name: str) -> Linear:
     """Calculate structure from excel file."""
     # Load data from excel file ///////////////////////////////////////////////////////////////////
     # Materials ***********************************************************************************
