@@ -92,12 +92,12 @@ export const App = (): React.JSX.Element => {
 			async () => {
 				console.log('Calculating structure...')
 				try {
-					const response = await fetch(`${baseURL}/calculate-structure`, {
+					const response = await fetch(`${baseURL}/calculate_structure`, {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json'
-						}
-						// body: JSON.stringify({ path })
+						},
+						body: JSON.stringify({ materials: structure.materials, sections: structure.sections })
 					})
 
 					if (!response.ok) {

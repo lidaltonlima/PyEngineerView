@@ -1,8 +1,8 @@
 """Main module."""
 import sys
 import pathlib
-from typing import Any
 from time import sleep
+# from typing import Literal
 
 import socket
 import threading
@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from pyengineer.tools import calculate_excel, create_json_input
+from pyengineer.types.structure import IStructure
 
 CURRENT_DIR = pathlib.Path(__file__).parent.resolve()
 
@@ -45,14 +46,11 @@ def open_excel(req: IOpenExcel):
         return JSONResponse(status_code=500, content={"message": str(e)})
 
 # Calculate structure route ***********************************************************************
-class ICalculateStructure(BaseModel):
-    """Interface"""
-    data: dict[str, Any]
-
-@app.post('/calculate-structure')
-def calculate_structure():
+@app.post('/calculate_structure')
+def calculate_structure(req: IStructure):
     """Calculate structure from data."""
     print('Calculating structure...')
+    print(req.sections)
 
 # Shutdown route **********************************************************************************
 server: uvicorn.Server | None = None
