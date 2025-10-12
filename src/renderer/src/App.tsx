@@ -136,10 +136,15 @@ export const App = (): React.JSX.Element => {
 			}
 		)
 
+		const disposeSaveAsFile = window.electron.ipcRenderer.on('save-as-file', async () => {
+			window.electron.ipcRenderer.send('save-as-file', structure)
+		})
+
 		return () => {
 			disposeOpenJsonFile()
 			disposeExcelFile()
 			disposeCalculateStructure()
+			disposeSaveAsFile()
 		}
 	}, [structure, baseURL])
 

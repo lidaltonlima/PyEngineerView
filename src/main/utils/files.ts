@@ -1,9 +1,9 @@
 import { app, BrowserWindow, dialog, OpenDialogReturnValue } from 'electron'
 import { readFileSync } from 'fs'
-import fs from 'fs/promises'
+import fs from 'fs'
 import path from 'path'
 
-const getMainWindow = (): BrowserWindow => {
+export const getMainWindow = (): BrowserWindow => {
 	return BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0]
 }
 
@@ -15,20 +15,47 @@ function getAssetPath(...paths: string[]): string {
 	}
 }
 
+// Open files /////////////////////////////////////////////////////////////////////////////////////
 export const openJson = (result: OpenDialogReturnValue): object | void => {
-	const focusedWin = BrowserWindow.getFocusedWindow()
+	const mainWindow = getMainWindow()
 	if (result.canceled || result.filePaths.length === 0) return
-	focusedWin?.webContents.send(
+	mainWindow.webContents.send(
 		'open-json-file',
 		JSON.parse(readFileSync(result.filePaths[0], 'utf-8'))
 	)
 }
 
 export const openExcel = (result: OpenDialogReturnValue): object | void => {
-	const focusedWin = BrowserWindow.getFocusedWindow()
-	focusedWin?.webContents.send('open-excel-file', result)
+	const MainWindow = getMainWindow()
+	MainWindow.webContents.send('open-excel-file', result)
 }
 
+export function openFileDialog(): void {
+	const mainWindow = getMainWindow()
+	dialog
+		.showOpenDialog(mainWindow, {
+			properties: ['openFile'],
+			filters: [
+				{
+					name: 'Excel or Json Files',
+					extensions: ['xlsx', 'json']
+				}
+			]
+		})
+		.then((result) => {
+			if (!result.canceled && result.filePaths.length > 0) {
+				const filePath = result.filePaths[0]
+				const extension = path.extname(filePath)
+				if (extension === '.json') openJson(result)
+				else if (extension === '.xlsx') openExcel(result)
+			}
+		})
+		.catch((error) => {
+			console.log(error)
+		})
+}
+
+// Save files /////////////////////////////////////////////////////////////////////////////////////
 export async function copyExcel(): Promise<void> {
 	const mainWindow = getMainWindow()
 
@@ -43,7 +70,7 @@ export async function copyExcel(): Promise<void> {
 
 	try {
 		// Copy file
-		await fs.copyFile(origem, result.filePath)
+		await fs.promises.copyFile(origem, result.filePath)
 
 		// Show success message
 		await dialog.showMessageBox(mainWindow, {
@@ -59,5 +86,29 @@ export async function copyExcel(): Promise<void> {
 			message: 'Failed to copy the file.',
 			detail: String(error)
 		})
+	}
+}
+
+export async function saveJsonDialog(data: object): Promise<void> {
+	const mainWindow = getMainWindow()
+	try {
+		const result = await dialog.showSaveDialog(mainWindow, {
+			title: 'Save File',
+			defaultPath: 'structure.json',
+			buttonLabel: 'Save',
+			filters: [
+				{
+					name: 'JSON',
+					extensions: ['json']
+				}
+			]
+		})
+
+		if (!result.canceled && result.filePath) {
+			// Save the content to the chosen path
+			fs.writeFileSync(result.filePath, JSON.stringify(data, null, 2))
+		}
+	} catch (error) {
+		console.error('Error saving file:', error)
 	}
 }

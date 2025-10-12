@@ -6,6 +6,7 @@ import { menuBarTemplate } from './menuBar'
 
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import path from 'path'
+import { saveJsonDialog } from './utils/files'
 
 // Variables
 let baseURL = ''
@@ -56,6 +57,11 @@ app.whenReady().then(async () => {
 	baseURL = `http://127.0.0.1:${port}`
 	ipcMain.on('finish-load', (event) => {
 		event.sender.send('backend-port', baseURL)
+	})
+
+	// Files **************************************************************************************
+	ipcMain.on('save-as-file', (_event, data) => {
+		saveJsonDialog(data)
 	})
 
 	// Dialogs **************************************************************************************

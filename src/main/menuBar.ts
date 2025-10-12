@@ -1,43 +1,22 @@
-import { dialog, MenuItem, MenuItemConstructorOptions, BrowserWindow } from 'electron'
-import { openJson, openExcel, copyExcel } from './utils/files'
-import path from 'path'
-
-const getMainWindow = (): BrowserWindow => {
-	return BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0]
-}
+import { MenuItem, MenuItemConstructorOptions } from 'electron'
+import { copyExcel, openFileDialog, getMainWindow } from './utils/files'
 
 export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 	{
 		label: 'File',
 		submenu: [
 			{
+				label: 'Save As',
+				accelerator: 'Ctrl+Shift+S',
+				click: () => {
+					const MainWindow = getMainWindow()
+					MainWindow.webContents.send('save-as-file')
+				}
+			},
+			{
 				label: 'Open File',
 				accelerator: 'Ctrl+O',
-				click: () => {
-					const mainWindow = getMainWindow()
-					dialog
-						.showOpenDialog(mainWindow, {
-							properties: ['openFile'],
-							filters: [
-								{
-									name: 'Excel or Json Files',
-									extensions: ['xlsx', 'json']
-								}
-							]
-						})
-						.then((result) => {
-							console.log(result)
-							if (!result.canceled && result.filePaths.length > 0) {
-								const filePath = result.filePaths[0]
-								const extension = path.extname(filePath)
-								if (extension === '.json') openJson(result)
-								else if (extension === '.xlsx') openExcel(result)
-							}
-						})
-						.catch((error) => {
-							console.log(error)
-						})
-				}
+				click: openFileDialog
 			},
 			{ type: 'separator' },
 			{ label: 'Exit', accelerator: 'Alt+F4', role: 'quit' }
