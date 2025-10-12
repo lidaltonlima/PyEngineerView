@@ -6,6 +6,7 @@ declare global {
 		api: unknown
 		dialogAPI: {
 			showError: (title: string, message: string) => void
+			showInfo: (title: string, message: string) => void
 		}
 	}
 }

@@ -119,7 +119,11 @@ export const App = (): React.JSX.Element => {
 					structure.results = data
 					setStructureData({ ...structure, results: data })
 					setFooterText('Click in a object for view results.')
-					window.alert('Calculation finished!')
+					window.dialogAPI.showInfo(
+						'Calculation finished',
+						`The calculation was finished!
+						click in a object for view results.`
+					)
 				} catch (error) {
 					console.error('Error connecting to backend:', error)
 				}

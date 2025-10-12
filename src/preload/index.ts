@@ -13,7 +13,8 @@ if (process.contextIsolated) {
 		contextBridge.exposeInMainWorld('api', api)
 		contextBridge.exposeInMainWorld('dialogAPI', {
 			showError: (title: string, message: string) =>
-				ipcRenderer.send('dialog-error', title, message)
+				ipcRenderer.send('dialog-error', title, message),
+			showInfo: (title: string, message: string) => ipcRenderer.send('dialog-info', title, message)
 		})
 	} catch (error) {
 		console.error(error)
