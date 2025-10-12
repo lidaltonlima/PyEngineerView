@@ -72,12 +72,12 @@ export interface ISupportData {
 // Loads //////////////////////////////////////////////////////////////////////////////////////////
 export interface ILoadData {
 	name: string
-	nodes: IPointLoadsData[]
+	nodes: INodeLoadsData[]
 	bars: IBarLoadsData
 }
 
 // Nodal loads ************************************************************************************
-export interface IPointLoadsData {
+export interface INodeLoadsData {
 	name: string
 	node: string
 	loads: { Fx: number; Fy: number; Fz: number; Mx: number; My: number; Mz: number }
@@ -86,7 +86,7 @@ export interface IPointLoadsData {
 // Bar loads **************************************************************************************
 export interface IBarLoadsData {
 	point: IBarPointLoadsData[]
-	distributed: IBarDistributedLoadsData[]
+	distributed: IBarDistLoadsData[]
 }
 
 export interface IBarPointLoadsData {
@@ -97,7 +97,7 @@ export interface IBarPointLoadsData {
 	loads: { Fx: number; Fy: number; Fz: number; Mx: number; My: number; Mz: number }
 }
 
-export interface IBarDistributedLoadsData {
+export interface IBarDistLoadsData {
 	name: string
 	bar: string
 	position: [number, number] // start, end

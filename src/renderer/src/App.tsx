@@ -97,12 +97,24 @@ export const App = (): React.JSX.Element => {
 						headers: {
 							'Content-Type': 'application/json'
 						},
-						body: JSON.stringify({ materials: structure.materials, sections: structure.sections })
+						body: JSON.stringify({
+							materials: structure.materials,
+							sections: structure.sections,
+							nodes: structure.nodes,
+							bars: structure.bars,
+							supports: structure.supports,
+							loads: structure.loads
+						})
 					})
 
 					if (!response.ok) {
 						throw new Error('Error in network response')
 					}
+
+					const data = await response.json()
+					structure.results = data
+					setStructureData({ ...structure, results: data })
+					setFooterText('Click in a object for view results.')
 				} catch (error) {
 					console.error('Error connecting to backend:', error)
 				}

@@ -5,10 +5,12 @@ from ._create_json_input import create_json_input
 from ._calculate_excel import calculate_excel
 from ._create_calculated_structure import create_calculated_structure
 from ._get_structure_from_excel import get_structure_from_excel
+from ._calculate_structure import calculate_structure_data
 
 __all__ = ['calculate_json',
            'create_json_results',
            'create_json_input',
            'calculate_excel',
            'get_structure_from_excel',
-           'create_calculated_structure']
+           'create_calculated_structure',
+           'calculate_structure_data']

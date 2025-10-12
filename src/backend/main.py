@@ -12,7 +12,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from pyengineer.tools import calculate_excel, create_json_input
+from pyengineer.tools import calculate_excel, create_json_input, calculate_structure_data
 from pyengineer.types.structure import IStructure
 
 CURRENT_DIR = pathlib.Path(__file__).parent.resolve()
@@ -43,14 +43,18 @@ def open_excel(req: IOpenExcel):
         return JSONResponse(status_code=200, content=data)
     except Exception as e: # pylint: disable=W0703
         print(f"Error: {e}", flush=True)
-        return JSONResponse(status_code=500, content={"message": str(e)})
+        return JSONResponse(status_code=500, content={'message': str(e)})
 
 # Calculate structure route ***********************************************************************
 @app.post('/calculate_structure')
 def calculate_structure(req: IStructure):
     """Calculate structure from data."""
-    print('Calculating structure...')
-    print(req.sections)
+    try:
+        result = calculate_structure_data(req)
+        return JSONResponse(status_code=200, content=result)
+    except Exception as e: # pylint: disable=W0703
+        print(f"Error: {e}", flush=True)
+        return JSONResponse(status_code=500, content={'message': str(e)})
 
 # Shutdown route **********************************************************************************
 server: uvicorn.Server | None = None
