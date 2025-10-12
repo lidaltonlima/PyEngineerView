@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: engineerview
+productName: PyEngineerView
 directories:
   buildResources: build
 files:
@@ -10,12 +10,12 @@ files:
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 extraResources:
-  - from: 'src/backend/dist/'
+  - from: 'src/backend/dist/engineer/'
     to: 'backend'
 asarUnpack:
   - resources/**
 win:
-  executableName: engineerview
+  executableName: PyEngineerView
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

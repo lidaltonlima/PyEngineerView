@@ -5,7 +5,7 @@ import PyInstaller.__main__ as pyi_main
 # Define the arguments for PyInstaller
 build_args = [
     'main.py',          # The main Python script to be converted
-    '--onefile',        # Create a single executable file
+    '--onedir',         # Create a directory with an executable and all dependencies
     '--noconsole',      # Do not show a console window (synonym for --noconsole)
     '--name=engineer',  # Optional: Set the final executable name
     '--clean'           # Optional: Remove temporary files before building

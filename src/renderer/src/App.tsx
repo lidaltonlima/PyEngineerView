@@ -115,6 +115,7 @@ export const App = (): React.JSX.Element => {
 					structure.results = data
 					setStructureData({ ...structure, results: data })
 					setFooterText('Click in a object for view results.')
+					window.alert('Calculation finished!')
 				} catch (error) {
 					console.error('Error connecting to backend:', error)
 				}
