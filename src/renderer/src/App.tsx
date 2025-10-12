@@ -56,7 +56,7 @@ export const App = (): React.JSX.Element => {
 			} catch (error) {
 				window.dialogMain.showError(
 					'Error opening Excel file',
-					`Check if it was using the template. \n
+					`Check if it was using the template.\n
 					The template is available in the folder of installation.\n
 					The path is templates/excel_template.xlsx`
 				)

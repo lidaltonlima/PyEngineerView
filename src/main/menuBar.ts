@@ -1,5 +1,6 @@
 import { dialog, MenuItem, MenuItemConstructorOptions, BrowserWindow } from 'electron'
 import { loadJsonData, loadExcelData } from './storage'
+import { copyFile } from './filesMain'
 
 const getMainWindow = (): BrowserWindow => {
 	// Uma maneira comum de obter a janela que criou o menu:
@@ -66,7 +67,7 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 		submenu: [
 			{
 				label: 'Calculate Structure',
-				accelerator: 'F5',
+				accelerator: 'Alt+C',
 				click: () => {
 					const focusedWin = BrowserWindow.getFocusedWindow()
 					focusedWin?.webContents.send('calculate-structure')
@@ -92,6 +93,15 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 		submenu: [
 			{ label: 'Minimize', accelerator: 'Ctrl+M', role: 'minimize' },
 			{ label: 'Close', accelerator: 'Ctrl+W', role: 'close' }
+		]
+	},
+	{
+		label: 'Templates',
+		submenu: [
+			{
+				label: 'Get Excel Template',
+				click: copyFile
+			}
 		]
 	}
 ]

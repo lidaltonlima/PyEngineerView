@@ -10,8 +10,11 @@ files:
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 extraResources:
-  - from: 'src/backend/dist/engineer/'
+  - from: 'src/backend/dist/engineer'
     to: 'backend'
+  - from: 'src/backend/pyengineer/templates'
+    to: 'templates'
+
 asarUnpack:
   - resources/**
 win:

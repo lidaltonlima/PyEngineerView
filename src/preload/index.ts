@@ -18,6 +18,9 @@ if (process.contextIsolated) {
 			showError: (title: string, message: string) =>
 				ipcRenderer.send('dialog-error', title, message)
 		})
+		contextBridge.exposeInMainWorld('fileMain', {
+			copyFile: () => ipcRenderer.send('copy-file')
+		})
 	} catch (error) {
 		console.error(error)
 	}
