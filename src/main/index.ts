@@ -136,7 +136,7 @@ async function startPythonBackend(): Promise<number> {
 		})
 
 		pyProc.stderr.on('data', (data) => {
-			console.error(`Python error: ${data}`)
+			console.error(`Python: ${data}`)
 		})
 
 		pyProc.on('close', (code) => {

@@ -112,7 +112,13 @@ export const App = (): React.JSX.Element => {
 					})
 
 					if (!response.ok) {
-						throw new Error('Error in network response')
+						try {
+							const errorData = await response.json()
+							window.dialogAPI.showError('Calculation error', errorData.message)
+						} catch {
+							window.dialogAPI.showError('Calculation error', 'Unknown error')
+						}
+						return
 					}
 
 					const data = await response.json()

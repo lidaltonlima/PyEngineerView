@@ -8,8 +8,8 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.join(current_dir, '..', '..')
 sys.path.append(project_root)
 # /////////////////////////////////////////////////////////////////////////////////////////////////
+from pyengineer.tools import calculate_excel
 
-from pyengineer.tools import get_structure_from_excel
 
-
-print(get_structure_from_excel('./src/examples/excel/matheus_romero_02.xlsx'))
+analysis = calculate_excel('./src/examples/excel/wrong_structure.xlsx', 'L1', calculate=True)
+print(analysis.bars)

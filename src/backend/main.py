@@ -2,7 +2,8 @@
 import sys
 import pathlib
 from time import sleep
-# from typing import Literal
+
+import numpy as np
 
 import socket
 import threading
@@ -52,6 +53,12 @@ def calculate_structure(req: IStructure):
     try:
         result = calculate_structure_data(req)
         return JSONResponse(status_code=200, content=result)
+    except np.linalg.LinAlgError as e:
+        print(f"Linear Algebra Error: {e}", flush=True)
+        return JSONResponse(status_code=422,
+                            content={'message':
+                                ('This structure is unstable.\n'
+                                 'Please check the supports, releases and loads.')})
     except Exception as e: # pylint: disable=W0703
         print(f"Error: {e}", flush=True)
         return JSONResponse(status_code=500, content={'message': str(e)})
