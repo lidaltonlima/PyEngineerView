@@ -1,5 +1,6 @@
 import { dialog, MenuItem, MenuItemConstructorOptions, BrowserWindow } from 'electron'
 import { openJson, openExcel, copyExcel } from './utils/files'
+import path from 'path'
 
 const getMainWindow = (): BrowserWindow => {
 	return BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0]
@@ -10,7 +11,7 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 		label: 'File',
 		submenu: [
 			{
-				label: 'Open Excel',
+				label: 'Open File',
 				accelerator: 'Ctrl+O',
 				click: () => {
 					const mainWindow = getMainWindow()
@@ -19,36 +20,19 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 							properties: ['openFile'],
 							filters: [
 								{
-									name: 'Excel Files',
-									extensions: ['xlsx']
+									name: 'Excel or Json Files',
+									extensions: ['xlsx', 'json']
 								}
 							]
 						})
 						.then((result) => {
-							openExcel(result)
-						})
-						.catch((error) => {
-							console.log(error)
-						})
-				}
-			},
-			{
-				label: 'Open Json',
-				accelerator: 'Ctrl+J',
-				click: () => {
-					const mainWindow = getMainWindow()
-					dialog
-						.showOpenDialog(mainWindow, {
-							properties: ['openFile'],
-							filters: [
-								{
-									name: 'JSON Files',
-									extensions: ['json']
-								}
-							]
-						})
-						.then((result) => {
-							openJson(result)
+							console.log(result)
+							if (!result.canceled && result.filePaths.length > 0) {
+								const filePath = result.filePaths[0]
+								const extension = path.extname(filePath)
+								if (extension === '.json') openJson(result)
+								else if (extension === '.xlsx') openExcel(result)
+							}
 						})
 						.catch((error) => {
 							console.log(error)
