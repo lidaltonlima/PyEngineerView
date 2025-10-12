@@ -1,12 +1,9 @@
 """Main module."""
-import sys
 import pathlib
-from time import sleep
+import socket
 
 import numpy as np
 
-import socket
-import threading
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
@@ -62,23 +59,6 @@ def calculate_structure(req: IStructure):
     except Exception as e: # pylint: disable=W0703
         print(f"Error: {e}", flush=True)
         return JSONResponse(status_code=500, content={'message': str(e)})
-
-# Shutdown route **********************************************************************************
-server: uvicorn.Server | None = None
-@app.post("/shutdown")
-def shutdown():
-    """
-    Route to gracefully shut down the server.
-    """
-    def stop():
-        if server:
-            sleep(0.5)  # Delay to ensure response is sent before shutdown
-            server.should_exit = True
-        sleep(0.5)
-        sys.exit(0)
-
-    threading.Thread(target=stop).start()
-    return JSONResponse({"message": "Server is shutting down..."})
 
 # Utils functions
 def find_free_port() -> int:

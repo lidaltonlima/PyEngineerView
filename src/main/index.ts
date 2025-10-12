@@ -4,7 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { menuBarTemplate } from './menuBar'
 
-import { ChildProcessWithoutNullStreams, exec, spawn } from 'child_process'
+import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import path from 'path'
 
 // Variables
@@ -97,15 +97,17 @@ app.whenReady().then(async () => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-	// Functions executed on app quit ///////////////////////////////////////////////////////////////
-	killPythonProcess()
+	if (process.platform !== 'darwin') {
+		app.quit()
+	}
+})
 
-	setTimeout(() => {
-		// Quit app
-		if (process.platform !== 'darwin') {
-			app.quit()
-		}
-	}, 3000) // Delay to ensure Python process is killed before quitting the app
+// Ensure the Python process is killed when the app is closed
+app.on('before-quit', (event) => {
+	event.preventDefault() // Prevent the default quit behavior
+	killPythonProcess().finally(() => {
+		app.exit() // Exit the app after killing the process
+	})
 })
 
 // In this file you can include the rest of your app's specific main process
@@ -146,36 +148,11 @@ async function startPythonBackend(): Promise<number> {
 }
 
 async function killPythonProcess(): Promise<void> {
-	if (!pyProc) return
-
-	// Attempt to gracefully shut down the FastAPI server
-	console.log('Shutting down Python backend...')
-	try {
-		await fetch(`${baseURL}/shutdown`, { method: 'POST' })
-	} catch (err) {
-		console.warn('shutdown error:', err)
+	if (!pyProc) {
+		throw Error('No Python process to kill')
 	}
-
-	// Force kill all subprocesses if still running
-	// Wait for 2 seconds before force killing
-	await new Promise((resolve) => setTimeout(resolve, 1500))
 	try {
-		if (process.platform === 'win32') {
-			const pid = pyProc.pid
-			console.log(`Closing backend (PID: ${pid})...`)
-			exec(`taskkill /pid ${pid} /T /F`, (err) => {
-				if (err) console.warn('Failed to kill process:', err)
-				else console.log('Backend closed successfully (Windows)')
-			})
-		} else {
-			// For Linux/macOS
-			try {
-				pyProc.kill('SIGTERM')
-				console.log('Backend closed successfully (Unix)')
-			} catch (err) {
-				console.warn('Failed to kill process:', err)
-			}
-		}
+		pyProc.kill('SIGTERM')
 	} catch (err) {
 		console.error('Error closing backend:', err)
 	}
