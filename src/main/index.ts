@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, nativeTheme, Menu, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, nativeTheme, Menu, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -59,8 +59,13 @@ app.whenReady().then(async () => {
 		event.sender.send('backend-port', baseURL)
 	})
 
-	// Read data files *******************************************************************
+	// Read data files ******************************************************************************
 	ipcMain.handle('get-data', (_event, filePath) => loadJsonData(filePath))
+
+	// Dialogs **************************************************************************************
+	ipcMain.on('dialog-error', (_event, title, message) => {
+		dialog.showErrorBox(title, message)
+	})
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Set app user model id for windows

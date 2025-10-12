@@ -14,6 +14,10 @@ if (process.contextIsolated) {
 		contextBridge.exposeInMainWorld('electronData', {
 			getData: (filePath: string) => ipcRenderer.invoke('get-data', filePath)
 		})
+		contextBridge.exposeInMainWorld('dialogMain', {
+			showError: (title: string, message: string) =>
+				ipcRenderer.send('dialog-error', title, message)
+		})
 	} catch (error) {
 		console.error(error)
 	}

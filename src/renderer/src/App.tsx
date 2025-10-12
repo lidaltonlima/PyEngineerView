@@ -54,7 +54,12 @@ export const App = (): React.JSX.Element => {
 				structure.sections = data.sections
 				structure.results = data.results
 			} catch (error) {
-				window.alert('Error opening Excel file. Check if it was using the template')
+				window.dialogMain.showError(
+					'Error opening Excel file',
+					`Check if it was using the template. \n
+					The template is available in the folder of installation.\n
+					The path is templates/excel_template.xlsx`
+				)
 				console.error('Error connecting to backend:', error)
 			}
 		}

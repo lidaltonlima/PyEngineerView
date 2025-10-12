@@ -8,5 +8,8 @@ declare global {
 			getData: (filePath) => Promise
 			saveData: (data) => void
 		}
+		dialogMain: {
+			showError: (title: string, message: string) => void
+		}
 	}
 }
