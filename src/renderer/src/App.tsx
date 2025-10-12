@@ -137,7 +137,18 @@ export const App = (): React.JSX.Element => {
 		)
 
 		const disposeSaveAsFile = window.electron.ipcRenderer.on('save-as-file', async () => {
-			window.electron.ipcRenderer.send('save-as-file', structure)
+			window.electron.ipcRenderer
+				.invoke('save-as-file', structure)
+				.then((result: { success: boolean; canceled?: boolean; error?: Error }) => {
+					if (result.success && !result.canceled) {
+						window.dialogAPI.showInfo('File saved', 'The structure was saved successfully.')
+					} else if (!result.success) {
+						window.dialogAPI.showError(
+							'Error saving file',
+							result?.error?.message || 'Unknown error'
+						)
+					}
+				})
 		})
 
 		return () => {

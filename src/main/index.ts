@@ -60,19 +60,33 @@ app.whenReady().then(async () => {
 	})
 
 	// Files **************************************************************************************
-	ipcMain.on('save-as-file', (_event, data) => {
-		saveJsonDialog(data)
+	ipcMain.handle('save-as-file', async (_event, data) => {
+		try {
+			const result = await saveJsonDialog(data)
+			return { success: true, canceled: result?.canceled }
+		} catch (error) {
+			console.error('Error saving file:', error)
+			return { success: false, error: error }
+		}
 	})
 
 	// Dialogs **************************************************************************************
-	ipcMain.on('dialog-error', (_event, title, message) => {
-		dialog.showErrorBox(title, message)
+	ipcMain.on('dialog-error', async (event, title, message) => {
+		const parentWindow = BrowserWindow.fromWebContents(event.sender)
+		await dialog.showMessageBox(parentWindow!, {
+			type: 'error',
+			title,
+			message,
+			buttons: ['OK']
+		})
 	})
-	ipcMain.on('dialog-info', (_event, title, message) => {
-		dialog.showMessageBox({
+	ipcMain.on('dialog-info', async (event, title, message) => {
+		const parentWindow = BrowserWindow.fromWebContents(event.sender)
+		await dialog.showMessageBox(parentWindow!, {
 			type: 'info',
 			title,
-			message
+			message,
+			buttons: ['OK']
 		})
 	})
 	/////////////////////////////////////////////////////////////////////////////////////////////////

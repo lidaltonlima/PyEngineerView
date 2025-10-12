@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, OpenDialogReturnValue } from 'electron'
+import { app, BrowserWindow, dialog, OpenDialogReturnValue, SaveDialogReturnValue } from 'electron'
 import { readFileSync } from 'fs'
 import fs from 'fs'
 import path from 'path'
@@ -89,7 +89,7 @@ export async function copyExcel(): Promise<void> {
 	}
 }
 
-export async function saveJsonDialog(data: object): Promise<void> {
+export async function saveJsonDialog(data: object): Promise<SaveDialogReturnValue | void> {
 	const mainWindow = getMainWindow()
 	try {
 		const result = await dialog.showSaveDialog(mainWindow, {
@@ -108,6 +108,7 @@ export async function saveJsonDialog(data: object): Promise<void> {
 			// Save the content to the chosen path
 			fs.writeFileSync(result.filePath, JSON.stringify(data, null, 2))
 		}
+		return result
 	} catch (error) {
 		console.error('Error saving file:', error)
 	}
