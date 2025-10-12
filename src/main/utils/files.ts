@@ -1,4 +1,5 @@
-import { dialog, BrowserWindow, app } from 'electron'
+import { app, BrowserWindow, dialog, OpenDialogReturnValue } from 'electron'
+import { readFileSync } from 'fs'
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -14,7 +15,21 @@ function getAssetPath(...paths: string[]): string {
 	}
 }
 
-export async function copyFile(): Promise<void> {
+export const openJson = (result: OpenDialogReturnValue): object | void => {
+	const focusedWin = BrowserWindow.getFocusedWindow()
+	if (result.canceled || result.filePaths.length === 0) return
+	focusedWin?.webContents.send(
+		'open-json-file',
+		JSON.parse(readFileSync(result.filePaths[0], 'utf-8'))
+	)
+}
+
+export const openExcel = (result: OpenDialogReturnValue): object | void => {
+	const focusedWin = BrowserWindow.getFocusedWindow()
+	focusedWin?.webContents.send('open-excel-file', result)
+}
+
+export async function copyExcel(): Promise<void> {
 	const mainWindow = getMainWindow()
 
 	const result = await dialog.showSaveDialog(mainWindow, {

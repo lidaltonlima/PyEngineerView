@@ -3,7 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { menuBarTemplate } from './menuBar'
-import { loadJsonData } from './storage'
+import { openJson } from './utils/files'
 
 import { ChildProcessWithoutNullStreams, exec, spawn } from 'child_process'
 import path from 'path'
@@ -60,7 +60,7 @@ app.whenReady().then(async () => {
 	})
 
 	// Files ****************************************************************************************
-	ipcMain.handle('get-data', (_event, filePath) => loadJsonData(filePath))
+	ipcMain.handle('get-data', (_event, filePath) => openJson(filePath))
 
 	// Dialogs **************************************************************************************
 	ipcMain.on('dialog-error', (_event, title, message) => {

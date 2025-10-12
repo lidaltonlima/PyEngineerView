@@ -1,9 +1,7 @@
 import { dialog, MenuItem, MenuItemConstructorOptions, BrowserWindow } from 'electron'
-import { loadJsonData, loadExcelData } from './storage'
-import { copyFile } from './filesMain'
+import { openJson, openExcel, copyExcel } from './utils/files'
 
 const getMainWindow = (): BrowserWindow => {
-	// Uma maneira comum de obter a janela que criou o menu:
 	return BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0]
 }
 
@@ -16,7 +14,6 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 				accelerator: 'Ctrl+O',
 				click: () => {
 					const mainWindow = getMainWindow()
-
 					dialog
 						.showOpenDialog(mainWindow, {
 							properties: ['openFile'],
@@ -28,7 +25,7 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 							]
 						})
 						.then((result) => {
-							loadExcelData(result)
+							openExcel(result)
 						})
 						.catch((error) => {
 							console.log(error)
@@ -51,7 +48,7 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 							]
 						})
 						.then((result) => {
-							loadJsonData(result)
+							openJson(result)
 						})
 						.catch((error) => {
 							console.log(error)
@@ -69,8 +66,8 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 				label: 'Calculate Structure',
 				accelerator: 'Alt+C',
 				click: () => {
-					const focusedWin = BrowserWindow.getFocusedWindow()
-					focusedWin?.webContents.send('calculate-structure')
+					const mainWindow = getMainWindow()
+					mainWindow.webContents.send('calculate-structure')
 				}
 			}
 		]
@@ -100,7 +97,7 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 		submenu: [
 			{
 				label: 'Get Excel Template',
-				click: copyFile
+				click: copyExcel
 			}
 		]
 	}

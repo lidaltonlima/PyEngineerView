@@ -54,7 +54,7 @@ export const App = (): React.JSX.Element => {
 				structure.sections = data.sections
 				structure.results = data.results
 			} catch (error) {
-				window.dialogMain.showError(
+				window.dialogAPI.showError(
 					'Error opening Excel file',
 					`Check if it was using the template.\n
 					The template is available in the folder of installation.\n
@@ -95,7 +95,6 @@ export const App = (): React.JSX.Element => {
 		const disposeCalculateStructure = window.electron.ipcRenderer.on(
 			'calculate-structure',
 			async () => {
-				console.log('Calculating structure...')
 				try {
 					const response = await fetch(`${baseURL}/calculate_structure`, {
 						method: 'POST',

@@ -11,15 +11,9 @@ if (process.contextIsolated) {
 	try {
 		contextBridge.exposeInMainWorld('electron', electronAPI)
 		contextBridge.exposeInMainWorld('api', api)
-		contextBridge.exposeInMainWorld('electronData', {
-			getData: (filePath: string) => ipcRenderer.invoke('get-data', filePath)
-		})
-		contextBridge.exposeInMainWorld('dialogMain', {
+		contextBridge.exposeInMainWorld('dialogAPI', {
 			showError: (title: string, message: string) =>
 				ipcRenderer.send('dialog-error', title, message)
-		})
-		contextBridge.exposeInMainWorld('fileMain', {
-			copyFile: () => ipcRenderer.send('copy-file')
 		})
 	} catch (error) {
 		console.error(error)

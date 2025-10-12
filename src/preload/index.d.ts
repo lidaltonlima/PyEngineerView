@@ -4,11 +4,7 @@ declare global {
 	interface Window {
 		electron: ElectronAPI
 		api: unknown
-		electronData: {
-			getData: (filePath) => Promise
-			saveData: (data) => void
-		}
-		dialogMain: {
+		dialogAPI: {
 			showError: (title: string, message: string) => void
 		}
 	}

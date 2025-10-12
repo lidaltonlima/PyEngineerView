@@ -162,7 +162,7 @@ export const Results = (): React.JSX.Element => {
 	}, [selection, isClickVoid, structure])
 
 	if (structure.results === undefined || structure.results.length === 0) {
-		return <p>No results available. Open a calculation structure.</p>
+		return <p>No results available. Calculate this structure or open a calculation structure.</p>
 	} else {
 		return results
 	}
