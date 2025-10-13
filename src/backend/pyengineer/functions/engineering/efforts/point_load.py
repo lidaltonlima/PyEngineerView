@@ -13,9 +13,7 @@ def normal(x: float,
            length: float,
            pt_loads: list[PtLoad],
            rotation_matrix: NDArray[float64],
-           extreme_forces: NDArray[float64] = \
-               np.array([0, 0, 0, 0, 0, 0,
-                         0, 0, 0, 0, 0, 0], dtype=float64)) -> NDArray[float64]:
+           extreme_forces: NDArray[float64]) -> NDArray[float64]:
     """Normal force at position x due to point loads"""
     if x < 0 or x > length:
         raise ValueError("Position x is out of bounds")
@@ -43,9 +41,7 @@ def shear_y(x: float,
             length: float,
             pt_loads: list[PtLoad],
             rotation_matrix: NDArray[float64],
-            extreme_forces: NDArray[float64] = \
-                np.array([0, 0, 0, 0, 0, 0,
-                          0, 0, 0, 0, 0, 0], dtype=float64)) -> NDArray[float64]:
+            extreme_forces: NDArray[float64]) -> NDArray[float64]:
     """Shear force at position x due to point loads"""
     if x < 0 or x > length:
         raise ValueError("Position x is out of bounds")
@@ -73,9 +69,7 @@ def shear_z(x: float,
             length: float,
             pt_loads: list[PtLoad],
             rotation_matrix: NDArray[float64],
-            extreme_forces: NDArray[float64] = \
-                np.array([0, 0, 0, 0, 0, 0,
-                          0, 0, 0, 0, 0, 0], dtype=float64)) -> NDArray[float64]:
+            extreme_forces: NDArray[float64]) -> NDArray[float64]:
     """Shear force at position x due to point loads"""
     if x < 0 or x > length:
         raise ValueError("Position x is out of bounds")
@@ -104,9 +98,7 @@ def moment_x(x: float,
              length: float,
              pt_loads: list[PtLoad],
              rotation_matrix: NDArray[float64],
-             extreme_forces: NDArray[float64] = \
-                 np.array([0, 0, 0, 0, 0, 0,
-                           0, 0, 0, 0, 0, 0], dtype=float64)) -> NDArray[float64]:
+             extreme_forces: NDArray[float64]) -> NDArray[float64]:
     """Bending moment at position x due to point loads"""
     if x < 0 or x > length:
         raise ValueError("Position x is out of bounds")
@@ -135,9 +127,7 @@ def moment_y(x: float,
              length: float,
              pt_loads: list[PtLoad],
              rotation_matrix: NDArray[float64],
-             extreme_forces: NDArray[float64] = \
-                 np.array([0, 0, 0, 0, 0, 0,
-                           0, 0, 0, 0, 0, 0], dtype=float64)) -> NDArray[float64]:
+             extreme_forces: NDArray[float64]) -> NDArray[float64]:
     """Bending moment at position x due to point loads"""
     if x < 0 or x > length:
         raise ValueError("Position x is out of bounds")
@@ -191,9 +181,7 @@ def moment_z(x: float,
              length: float,
              pt_loads: list[PtLoad],
              rotation_matrix: NDArray[float64],
-             extreme_forces: NDArray[float64] = \
-                 np.array([0, 0, 0, 0, 0, 0,
-                           0, 0, 0, 0, 0, 0], dtype=float64)) -> NDArray[float64]:
+             extreme_forces: NDArray[float64]) -> NDArray[float64]:
     """Bending moment at position x due to point loads"""
     if x < 0 or x > length:
         raise ValueError("Position x is out of bounds")
