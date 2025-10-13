@@ -60,18 +60,6 @@ app.whenReady().then(async () => {
 	})
 
 	// Files **************************************************************************************
-	ipcMain.handle('save-as-file', async (event, data) => {
-		try {
-			const result = await saveJsonDialog(data)
-			const filePath = result?.filePath[0] || undefined
-			event.sender.send('set-open-file-path', filePath)
-			return { success: true, canceled: result?.canceled }
-		} catch (error) {
-			console.error('Error saving file:', error)
-			return { success: false, error: error }
-		}
-	})
-
 	ipcMain.handle('save-file', async (event, data, path) => {
 		if (!path) {
 			try {
@@ -86,6 +74,18 @@ app.whenReady().then(async () => {
 		} else {
 			const result = await saveJson(data, path)
 			return { ...result, canceled: false }
+		}
+	})
+
+	ipcMain.handle('save-as-file', async (event, data) => {
+		try {
+			const result = await saveJsonDialog(data)
+			const filePath = result?.filePath[0] || undefined
+			event.sender.send('set-open-file-path', filePath)
+			return { success: true, canceled: result?.canceled }
+		} catch (error) {
+			console.error('Error saving file:', error)
+			return { success: false, error: error }
 		}
 	})
 

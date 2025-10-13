@@ -85,14 +85,17 @@ export const App = (): React.JSX.Element => {
 			}
 		)
 
-		const disposeExcelFile = window.electron.ipcRenderer.on('open-excel-file', (_event, result) => {
-			if (result.canceled) return
-			openExcel(result.filePaths[0])
-			// Set footer text
-			setFooterText(
-				'No results available. Calculate this structure or open a calculation structure.'
-			)
-		})
+		const disposeOpenExcelFile = window.electron.ipcRenderer.on(
+			'open-excel-file',
+			(_event, result) => {
+				if (result.canceled) return
+				openExcel(result.filePaths[0])
+				// Set footer text
+				setFooterText(
+					'No results available. Calculate this structure or open a calculation structure.'
+				)
+			}
+		)
 
 		const disposeCalculateStructure = window.electron.ipcRenderer.on(
 			'calculate-structure',
@@ -139,8 +142,8 @@ export const App = (): React.JSX.Element => {
 		)
 
 		const disposeSaveFile = window.electron.ipcRenderer.on('save-file', async () => {
-			window.electron.ipcRenderer
-				.invoke('save-file', structure, files.filePath)
+			window.filesAPI
+				.saveFile(structure, files.filePath)
 				.then((result: { success: boolean; canceled?: boolean; error?: Error }) => {
 					if (result.success && !result.canceled) {
 						window.dialogAPI.showInfo('File saved', 'The structure was saved successfully.')
@@ -153,19 +156,14 @@ export const App = (): React.JSX.Element => {
 				})
 		})
 
-		const disposeSaveAsFile = window.electron.ipcRenderer.on('save-as-file', async () => {
-			window.electron.ipcRenderer
-				.invoke('save-as-file', structure)
-				.then((result: { success: boolean; canceled?: boolean; error?: Error }) => {
-					if (result.success && !result.canceled) {
-						window.dialogAPI.showInfo('File saved', 'The structure was saved successfully.')
-					} else if (!result.success) {
-						window.dialogAPI.showError(
-							'Error saving file',
-							result?.error?.message || 'Unknown error'
-						)
-					}
-				})
+		const disposeSaveAsFile = window.electron.ipcRenderer.on('save-as-file', () => {
+			window.filesAPI.saveAsFile(structure).then((result) => {
+				if (result.success && !result.canceled) {
+					window.dialogAPI.showInfo('File saved', 'The structure was saved successfully.')
+				} else if (!result.success) {
+					window.dialogAPI.showError('Error saving file', result?.error?.message || 'Unknown error')
+				}
+			})
 		})
 
 		const disposeSetOpenFilePath = window.electron.ipcRenderer.on(
@@ -177,7 +175,7 @@ export const App = (): React.JSX.Element => {
 
 		return () => {
 			disposeOpenJsonFile()
-			disposeExcelFile()
+			disposeOpenExcelFile()
 			disposeCalculateStructure()
 			disposeSaveFile()
 			disposeSaveAsFile()
@@ -213,7 +211,7 @@ export const App = (): React.JSX.Element => {
 					<Accordion title='View' className='accordion'>
 						<ViewEntities />
 					</Accordion>
-					<Accordion title='Results' className='accordion'>
+					<Accordion title='Results' className='accordion' open>
 						<Results />
 					</Accordion>
 				</ResizableContainer>

@@ -16,6 +16,19 @@ if (process.contextIsolated) {
 				ipcRenderer.send('dialog-error', title, message),
 			showInfo: (title: string, message: string) => ipcRenderer.send('dialog-info', title, message)
 		})
+		contextBridge.exposeInMainWorld('filesAPI', {
+			saveFile: (
+				data: object,
+				path: string | undefined
+			): Promise<{ success: boolean; canceled?: boolean; error?: Error }> => {
+				return ipcRenderer.invoke('save-file', data, path)
+			},
+			saveAsFile: (
+				data: object
+			): Promise<{ success: boolean; canceled?: boolean; error?: Error }> => {
+				return ipcRenderer.invoke('save-as-file', data)
+			}
+		})
 	} catch (error) {
 		console.error(error)
 	}
