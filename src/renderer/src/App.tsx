@@ -8,10 +8,12 @@ import { Results, ViewEntities } from './contents'
 import { useSceneContext } from './contexts/Scene'
 import { useStructureContext } from './contexts/Structure'
 import { IStructureData } from './types/Structure'
+import { useFilesContext } from './contexts/files/FilesContext'
 
 export const App = (): React.JSX.Element => {
 	const { structure } = useStructureContext()
 	const { view } = useSceneContext()
+	const files = useFilesContext()
 
 	const [structureData, setStructureData] = useState<IStructureData | null>()
 	const [footerText, setFooterText] = useState('Open a structure')
@@ -136,6 +138,21 @@ export const App = (): React.JSX.Element => {
 			}
 		)
 
+		const disposeSaveFile = window.electron.ipcRenderer.on('save-file', async () => {
+			window.electron.ipcRenderer
+				.invoke('save-file', structure, files.filePath)
+				.then((result: { success: boolean; canceled?: boolean; error?: Error }) => {
+					if (result.success && !result.canceled) {
+						window.dialogAPI.showInfo('File saved', 'The structure was saved successfully.')
+					} else if (!result.success) {
+						window.dialogAPI.showError(
+							'Error saving file',
+							result?.error?.message || 'Unknown error'
+						)
+					}
+				})
+		})
+
 		const disposeSaveAsFile = window.electron.ipcRenderer.on('save-as-file', async () => {
 			window.electron.ipcRenderer
 				.invoke('save-as-file', structure)
@@ -151,13 +168,22 @@ export const App = (): React.JSX.Element => {
 				})
 		})
 
+		const disposeSetOpenFilePath = window.electron.ipcRenderer.on(
+			'set-open-file-path',
+			(_event, path: string) => {
+				files.filePath = path
+			}
+		)
+
 		return () => {
 			disposeOpenJsonFile()
 			disposeExcelFile()
 			disposeCalculateStructure()
+			disposeSaveFile()
 			disposeSaveAsFile()
+			disposeSetOpenFilePath()
 		}
-	}, [structure, baseURL])
+	}, [structure, baseURL, files])
 
 	return (
 		<>

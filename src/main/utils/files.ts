@@ -61,6 +61,7 @@ export async function copyExcel(): Promise<void> {
 
 	const result = await dialog.showSaveDialog(mainWindow, {
 		title: 'Save Excel Template',
+		defaultPath: 'excel_template.xlsx',
 		filters: [{ name: 'Excel Files', extensions: ['xlsx'] }]
 	})
 
@@ -111,5 +112,16 @@ export async function saveJsonDialog(data: object): Promise<SaveDialogReturnValu
 		return result
 	} catch (error) {
 		console.error('Error saving file:', error)
+	}
+}
+
+export async function saveJson(data: object, path: string): Promise<object | void> {
+	try {
+		// Save the content to the chosen path
+		fs.writeFileSync(path, JSON.stringify(data, null, 2))
+		return { success: true }
+	} catch (error) {
+		console.error('Error saving file:', error)
+		return { success: false, message: String(error) }
 	}
 }

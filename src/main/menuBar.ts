@@ -6,6 +6,14 @@ export const menuBarTemplate: (MenuItemConstructorOptions | MenuItem)[] = [
 		label: 'File',
 		submenu: [
 			{
+				label: 'Save',
+				accelerator: 'Ctrl+S',
+				click: () => {
+					const MainWindow = getMainWindow()
+					MainWindow.webContents.send('save-file')
+				}
+			},
+			{
 				label: 'Save As',
 				accelerator: 'Ctrl+Shift+S',
 				click: () => {

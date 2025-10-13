@@ -6,7 +6,7 @@ import { menuBarTemplate } from './menuBar'
 
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import path from 'path'
-import { saveJsonDialog } from './utils/files'
+import { saveJsonDialog, saveJson } from './utils/files'
 
 // Variables
 let baseURL = ''
@@ -60,13 +60,32 @@ app.whenReady().then(async () => {
 	})
 
 	// Files **************************************************************************************
-	ipcMain.handle('save-as-file', async (_event, data) => {
+	ipcMain.handle('save-as-file', async (event, data) => {
 		try {
 			const result = await saveJsonDialog(data)
+			const filePath = result?.filePath[0] || undefined
+			event.sender.send('set-open-file-path', filePath)
 			return { success: true, canceled: result?.canceled }
 		} catch (error) {
 			console.error('Error saving file:', error)
 			return { success: false, error: error }
+		}
+	})
+
+	ipcMain.handle('save-file', async (event, data, path) => {
+		if (!path) {
+			try {
+				const result = await saveJsonDialog(data)
+				const filePath = result?.filePath || undefined
+				event.sender.send('set-open-file-path', filePath)
+				return { success: true, canceled: result?.canceled }
+			} catch (error) {
+				console.error('Error saving file:', error)
+				return { success: false, error: error }
+			}
+		} else {
+			const result = await saveJson(data, path)
+			return { ...result, canceled: false }
 		}
 	})
 
