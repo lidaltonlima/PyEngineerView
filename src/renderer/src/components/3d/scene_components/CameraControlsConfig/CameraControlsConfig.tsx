@@ -59,7 +59,7 @@ export const CameraControlsConfig = (): React.JSX.Element => {
 
 				default:
 					controlsRef.current.mouseButtons = defaultMouseButtons
-					setSpeedDolly(0.7)
+					setSpeedDolly(0.5)
 			}
 		}
 	})

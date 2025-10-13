@@ -79,7 +79,7 @@ export const Results = (): React.JSX.Element => {
 										<fieldset>
 											<legend>Moments</legend>
 											<p style={{ color: barResults!.Mxi >= 0 ? 'green' : 'red' }}>
-												<strong>Fx:</strong> {barResults?.Mxi.toExponential(4)}
+												<strong>Mx:</strong> {barResults?.Mxi.toExponential(4)}
 											</p>
 											<p style={{ color: barResults!.Myi >= 0 ? 'green' : 'red' }}>
 												<strong>My:</strong> {barResults?.Myi.toExponential(4)}
