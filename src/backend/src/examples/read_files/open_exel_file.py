@@ -17,7 +17,9 @@ from pyengineer.tools import calculate_excel
 np.set_printoptions(formatter={'float_kind': '{: .4e}'.format}, linewidth=200)
 
 # Calculate structure from excel file
-analysis = calculate_excel(path='./src/examples/excel/structure_011.xlsx', load_name='L1')
+analysis = calculate_excel(path='./src/examples/excel/structure_011.xlsx',
+                           load_name='L1',
+                           calculate=True)
 
 # Print results
 print(analysis.get_displacements('N2', 'L1'))
