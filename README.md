@@ -10,14 +10,36 @@ An Electron application with React and TypeScript
 
 ### Install
 
+Open two folders in separate instances in VS Code.
+
+In root folder execute:
+
 ```bash
 $ npm install
 ```
 
+In backend folder (./src/backend) execute:
+
+```bash
+$ pip install -r requirements.txt
+$ pyinstaller --onefile --noconsole main.py
+```
+
+_Root_ folder is used to interface and build application
+_Backend_ folder is used to engineer calculate
+
 ### Development
+
+Fast test
 
 ```bash
 $ npm run dev
+```
+
+Build then test
+
+```bash
+$ npm run start
 ```
 
 ### Build
