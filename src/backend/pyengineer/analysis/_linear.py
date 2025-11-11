@@ -46,8 +46,10 @@ class Linear:
         self.forces_vector = self.calculate_forces_vector()
 
         for load in self.loads:
-            # Calculate displacements
-            self.displacements[load] = np.linalg.inv(self.kg_solution) @ self.forces_vector[load]
+            displacements_solve = np.linalg.solve(self.kg_solution, self.forces_vector[load])
+
+            # Use the optimized method for final result
+            self.displacements[load] = displacements_solve.astype(float64)
 
             # Calculate reactions
             self.reactions[load] = self.kg @ self.displacements[load] - self.forces_vector[load]

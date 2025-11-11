@@ -98,7 +98,8 @@ export const Bar = ({ bar, labelSize = 0.1, color = 'orange' }: IBarProps): Reac
 				userData={{ type: 'bar', name: bar.name } as IEntityData}
 				points={[startPoint, endPoint]}
 				color={color}
-				lineWidth={2}
+				worldUnits={true}
+				lineWidth={0.02}
 				onClick={(event) =>
 					click(event, event.object.userData as IEntityData, structure, selectionContext)
 				}
