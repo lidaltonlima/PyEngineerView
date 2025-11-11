@@ -50,11 +50,12 @@ export const CameraControlsConfig = (): React.JSX.Element => {
 			switch (buttonPressed) {
 				case 'Control':
 					controlsRef.current.mouseButtons = ctrlMouseButtons
-					setSpeedDolly(0.2)
+					setSpeedDolly(0.15)
 					break
 
 				case 'Shift':
 					controlsRef.current.mouseButtons = shiftMouseButtons
+					setSpeedDolly(0.1)
 					break
 
 				default:
