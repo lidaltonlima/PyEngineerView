@@ -47,10 +47,15 @@ PyEngineerView follows a hybrid architecture:
 
 ### Communication Flow
 
-```mermaid
-graph LR
-  A[React<br/>Frontend<br/>UI/3D] <-->|IPC| B[Electron<br/>Main<br/>Process]
-  B <-->|HTTP| C[Python<br/>Backend<br/>FastAPI]
+```text
+┌─────────────────────┐         ┌──────────────────────┐         ┌─────────────────────┐
+│   React Frontend    │   IPC   │  Electron Main       │  HTTP   │  Python Backend     │
+│   (UI/3D)           │ <-----> │  Process             │ <-----> │  (FastAPI)          │
+│                     │         │                      │         │                     │
+│  - Three.js         │         │  - Backend Lifecycle │         │  - NumPy Engine     │
+│  - React Components │         │  - IPC Bridge        │         │  - Structural Calc  │
+│  - User Interface   │         │  - File Operations   │         │  - Excel Processing │
+└─────────────────────┘         └──────────────────────┘         └─────────────────────┘
 ```
 
 ### Architecture Diagram
