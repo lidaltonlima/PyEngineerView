@@ -146,20 +146,25 @@ The built application will be in the `dist/` folder.
 ### Creating and Analyzing Structures
 
 1. **Get the Excel Template**
-   - Go to `Templates > Get Excel Template`
-   - Use this template to define your structural model
+    - Go to `Templates > Get Excel Template`
+    - Use this template to define your structural model
 
 2. **Import Your Model**
-   - Use `File > Open File` to import the Excel file
-   - You can also open previously saved `.json` files
+    - Use `File > Open File` to import the Excel file
+    - You can also open previously saved `.json` files
 
 3. **Calculate the Structure**
-   - Go to `Calculate > Calculate Structure`
-   - The engine will perform linear analysis
+    - Go to `Calculate > Calculate Structure`
+    - The engine will perform linear analysis
+    > [!IMPORTANT]
+    > Currently the calculation supports only:
+    > - Linear elastic analysis
+    > - Symmetric cross-sections
+    > - Loads applied at the Center of Gravity (CG) which must coincide with the Shear Center (SC)
 
 4. **View Results**
-   - Click on any structural element (node, bar, support)
-   - Results appear in the right panel under the `Results` tab
+    - Click on any structural element (node, bar, support)
+    - Results appear in the right panel under the `Results` tab
 
 ### Navigation Controls
 
