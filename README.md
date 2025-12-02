@@ -470,6 +470,7 @@ copies or substantial portions of the Software.
 ## 👨‍💻 Author
 
 Lidalton S. de Lima
+Maicon José Hillesheim
 
 ## 🙏 Acknowledgments
 
