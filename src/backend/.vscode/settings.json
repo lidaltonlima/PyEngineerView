@@ -65,6 +65,20 @@
 		"togglefullscreen",
 		"venv"
 	],
-	"python-envs.defaultEnvManager": "ms-python.python:system",
-	"python-envs.pythonProjects": []
+  // Python
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "python.defaultInterpreterPath": ".\\.venv\\Scripts\\python.exe", // ou ./.venv/bin/python Mac/Linux
+  "python.analysis.autoImportCompletions": true,
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "python.terminal.activateEnvironment": true,
+  "python.languageServer": "Pylance",
 }
