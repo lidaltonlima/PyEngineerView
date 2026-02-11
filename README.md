@@ -128,6 +128,14 @@ npm run start
 
 Build the application for your platform:
 
+**First:**
+Open `PyEngineerView/src/backend` and execute build.py
+
+If not view `Build completed!` in terminal, exexute build.py again
+
+**Second:**
+Open `PyEngineerView` and execute (With admin):
+
 ```bash
 # Windows
 npm run build:win
