@@ -1,84 +1,147 @@
 {
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-    // Ícones personalizados para as pastas com nome diferente
-  "material-icon-theme.folders.associations": {
-      "resizablecontainer": "container",
-      "navbar": "link",
-      "tabbar": "command",
-      "renderer": "interface",
-      "preload": "include",
-      "3d": "unity",
-      "accordion": "container",
-      "footer": "powershell",
-      "titlebar": "desktop",
-      "objects": "sandbox",
-      "scene_components": "components",
-      "scenes_2d": "ui",
-      "scenes_3d": "webpack",
-      "analysis": "core",
-      "results": "functions",
-      "aside": "template",
-      "workspace": "app",
-      "workspaces": "app",
-      "popupcontainer": "container",
-      "tabcontainer": "container",
-			"structural": "delta",
-			"loads": "download",
-			"fetch": "download",
-			"engineering": "nuxt",
-			"reactions": "vercel",
-			"pyengineer": "nuxt",
-  },
-  "cSpell.words": [
-    "arctan",
-    "ASGI",
-    "collinearity",
-    "disp",
-    "docstrings",
-    "drei",
-    "electronjs",
-    "eslintcache",
-    "euler",
-    "Lidalton",
-    "lightgreen",
-    "linalg",
-    "linux",
-    "matheus",
-    "ndarray",
-    "noconsole",
-    "nsis",
-    "onefile",
-    "pinv",
-    "printoptions",
-    "pyengineer",
-    "pyinstaller",
-    "pylint",
-    "pyright",
-    "pyvista",
-    "raycaster",
-    "romero",
-    "Silvio",
-    "taskkill",
-    "togglefullscreen",
-    "Uvicorn",
-    "venv"
-  ],
-  "python-envs.defaultEnvManager": "ms-python.python:system",
-  "python-envs.pythonProjects": [],
-  "files.watcherExclude": {
-    "**/.git/objects/**": true,
-    "**/.git/subtree-cache/**": true,
-    "**/.hg/store/**": true,
-    "**/.git/**": true,
-    "**/node_modules/**": true,
-    "**/.vscode/**": true
-  }
+	// ==============================================================================================
+	// General
+	// ==============================================================================================
+	// Editor ***************************************************************************************
+	"editor.formatOnSave": true,
+	"files.eol": "\n",
+
+	// Fonts ****************************************************************************************
+	"editor.fontSize": 18,
+	"debug.console.fontSize": 16,
+	"terminal.integrated.fontSize": 16,
+
+	// Interface ************************************************************************************
+	"workbench.colorTheme": "OM Theme (Default Dracula Italic)",
+	"workbench.iconTheme": "material-icon-theme",
+	"explorer.compactFolders": false,
+
+	// ==============================================================================================
+	// Languages and files types
+	// ==============================================================================================
+	// Fortran **************************************************************************************
+	"fortran.linter.compiler": "gfortran",
+	"fortran.linter.includePaths": ["${workspaceFolder}/build/**", "${workspaceFolder}/src/**"],
+	"[FortranFreeForm]": {
+		"editor.formatOnSave": false,
+		"editor.tabSize": 4
+	},
+	"fortran.formatting.formatter": "findent",
+	"fortran.formatting.findentArgs": [
+		"--indent=4",
+		"--indent_select=8",
+		"--indent_case=4",
+		"--line-length=100"
+	],
+
+	// Python ***************************************************************************************
+	"python.analysis.typeCheckingMode": "off",
+	"python-envs.defaultEnvManager": "ms-python.python:system",
+
+	// Json *****************************************************************************************
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+
+	// LaTeX ****************************************************************************************
+	"[latex]": {
+		"editor.defaultFormatter": "James-Yu.latex-workshop"
+	},
+
+	// TypeScript ***********************************************************************************
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+
+	// JavaScript ***********************************************************************************
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+
+	// ==============================================================================================
+	// Extensions
+	// ==============================================================================================
+	// Code Runner **********************************************************************************
+	"code-runner.runInTerminal": true,
+	"code-runner.saveFileBeforeRun": true,
+	"code-runner.ignoreSelection": true,
+	"code-runner.fileDirectoryAsCwd": false,
+	"code-runner.cwd": "$workspaceRoot",
+	"code-runner.executorMap": {
+		"FortranFreeForm": "clear ; cd $dir && fpm run"
+	},
+
+	// Code Spell Checker ***************************************************************************
+	"cSpell.language": "en, pt-BR",
+
+	// Copilot **************************************************************************************
+	"github.copilot.enable": {
+		"*": true,
+		"FortranFreeForm": false
+	},
+	// Material Icon Theme **************************************************************************
+	"material-icon-theme.folders.associations": {
+		"resizablecontainer": "container",
+		"navbar": "link",
+		"tabbar": "command",
+		"renderer": "interface",
+		"preload": "include",
+		"3d": "unity",
+		"accordion": "container",
+		"footer": "powershell",
+		"titlebar": "desktop",
+		"objects": "sandbox",
+		"scene_components": "components",
+		"scenes_2d": "ui",
+		"scenes_3d": "webpack",
+		"analysis": "core",
+		"results": "functions",
+		"aside": "template",
+		"workspace": "app",
+		"workspaces": "app",
+		"popupcontainer": "container",
+		"tabcontainer": "container",
+		"structural": "delta",
+		"loads": "download",
+		"fetch": "download",
+		"engineering": "nuxt",
+		"reactions": "vercel",
+		"pyengineer": "nuxt"
+	},
+
+	// Code Spell Checker ***************************************************************************
+	"cSpell.words": [
+		"arctan",
+		"ASGI",
+		"collinearity",
+		"disp",
+		"docstrings",
+		"drei",
+		"electronjs",
+		"eslintcache",
+		"euler",
+		"Lidalton",
+		"lightgreen",
+		"linalg",
+		"linux",
+		"matheus",
+		"ndarray",
+		"noconsole",
+		"nsis",
+		"onefile",
+		"pinv",
+		"printoptions",
+		"pyengineer",
+		"pyinstaller",
+		"pylint",
+		"pyright",
+		"pyvista",
+		"raycaster",
+		"romero",
+		"Silvio",
+		"taskkill",
+		"togglefullscreen",
+		"Uvicorn",
+		"venv"
+	]
 }

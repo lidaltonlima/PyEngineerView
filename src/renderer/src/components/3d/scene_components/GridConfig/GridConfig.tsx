@@ -7,6 +7,7 @@ export const GridConfig = (): React.JSX.Element => {
 			<Grid
 				rotation-x={Math.PI / 2}
 				args={[10, 10]}
+				followCamera
 				infiniteGrid
 				fadeDistance={200}
 				fadeStrength={1}
